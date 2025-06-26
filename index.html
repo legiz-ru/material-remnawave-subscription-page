@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#EADDFF" id="theme-color-meta">
+    <title id="page-title">Subscription</title>
+<script>
+  const fontLinks = [
+    {
+      name: "Inter",
+      urls: [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap",
+        "https://fonts.font.im/css2?family=Inter:wght@400;500;700&display=swap",
+        "https://fonts.w.tools/css2?family=Inter:wght@400;500;700&display=swap"
+      ]
+    },
+    {
+      name: "Material Symbols Outlined",
+      urls: [
+        "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+        "https://fonts.font.im/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+        "https://fonts.w.tools/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      ]
+    }
+  ];
+
+  fontLinks.forEach(font => {
+    let index = 0;
+
+    const tryLoad = () => {
+      if (index >= font.urls.length) {
+        console.error(`❌ Не удалось загрузить шрифт "${font.name}" ни с одного CDN`);
+        return;
+      }
+
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = font.urls[index];
+      link.onload = () => {
+        console.log(`✅ ${font.name} успешно загружен с: ${font.urls[index]}`);
+      };
+      link.onerror = () => {
+        console.warn(`⚠️ ${font.name}: ошибка загрузки ${font.urls[index]}, пробую следующий...`);
+        index++;
+        tryLoad();
+      };
+      document.head.appendChild(link);
+    };
+
+    tryLoad();
+  });
+</script>
+
+<script>
+  const cdns = [
+    "https://cdn.tailwindcss.com",
+    "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+    "https://unpkg.com/@tailwindcss/browser@4"
+  ];
+
+  function loadScript(src, onSuccess, onError) {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = onSuccess;
+    script.onerror = onError;
+    document.head.appendChild(script);
+  }
+
+  function tryLoadCDNs(index = 0) {
+    if (index >= cdns.length) {
+      console.error("❌ Не удалось загрузить Tailwind с любого CDN");
+      return;
+    }
+    loadScript(
+      cdns[index],
+      () => console.log(`✅ Tailwind загружен с: ${cdns[index]}`),
+      () => {
+        console.warn(`⚠️ Не удалось загрузить: ${cdns[index]}, пробую следующий...`);
+        tryLoadCDNs(index + 1);
+      }
+    );
+  }
+
+  tryLoadCDNs();
+</script>
+
+<script>
+  const cdnList = [
+    "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js",
+    "https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js",
+    "https://raw.githubusercontent.com/davidshimjs/qrcodejs/master/qrcode.min.js"
+  ];
+
+  let index = 0;
+
+  function tryLoadScript() {
+    if (index >= cdnList.length) {
+      console.error("❌ Не удалось загрузить qrcode.min.js ни с одного источника.");
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = cdnList[index];
+    script.onload = () => {
+      console.log(`✅ qrcode.min.js успешно загружен с: ${cdnList[index]}`);
+    };
+    script.onerror = () => {
+      console.warn(`⚠️ Ошибка загрузки ${cdnList[index]}, пробую следующий...`);
+      index++;
+      tryLoadScript();
+    };
+    document.head.appendChild(script);
+  }
+
+  tryLoadScript();
+</script>
+
+
+<style>
+        /* Base styles for Material 3 design system */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--color-background);
+            color: var(--color-on-background);
+        }
+
+        /* Color variables for different palettes and brightness levels */
+        
+/* Red Palette - НОВАЯ: более сбалансированная красная тема */
+[data-theme="red-light"] {
+    --color-primary: #D32F2F; --color-on-primary: #FFFFFF; --color-primary-container: #FFCDD2; --color-on-primary-container: #B71C1C;
+    --color-secondary: #C2185B; --color-on-secondary: #FFFFFF; --color-secondary-container: #F8BBD9; --color-on-secondary-container: #880E4F;
+    --color-tertiary: #FF5722; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #FFCCBC; --color-on-tertiary-container: #BF360C;
+    --color-error: #D32F2F; --color-on-error: #FFFFFF; --color-error-container: #FFCDD2; --color-on-error-container: #B71C1C;
+    --color-background: #FFFBFF; --color-on-background: #1C1B1F; --color-surface: #FFFBFF; --color-on-surface: #1C1B1F;
+    --color-surface-variant: #F5F5F5; --color-on-surface-variant: #424242; --color-outline: #757575; --color-inverse-on-surface: #F5F5F5;
+    --color-inverse-surface: #2E2E2E; --color-inverse-primary: #EF5350; --color-shadow: #000000; --color-surface-tint: #D32F2F;
+    --color-outline-variant: #BDBDBD; --color-scrim: #000000;
+}
+[data-theme="red-dark"] {
+    --color-primary: #EF5350; --color-on-primary: #B71C1C; --color-primary-container: #B71C1C; --color-on-primary-container: #FFCDD2;
+    --color-secondary: #F06292; --color-on-secondary: #880E4F; --color-secondary-container: #AD1457; --color-on-secondary-container: #F8BBD9;
+    --color-tertiary: #FF7043; --color-on-tertiary: #BF360C; --color-tertiary-container: #E64A19; --color-on-tertiary-container: #FFCCBC;
+    --color-error: #F44336; --color-on-error: #B71C1C; --color-error-container: #C62828; --color-on-error-container: #FFCDD2;
+    --color-background: #121212; --color-on-background: #E0E0E0; --color-surface: #1E1E1E; --color-on-surface: #E0E0E0;
+    --color-surface-variant: #424242; --color-on-surface-variant: #BDBDBD; --color-outline: #757575; --color-inverse-on-surface: #121212;
+    --color-inverse-surface: #E0E0E0; --color-inverse-primary: #D32F2F; --color-shadow: #000000; --color-surface-tint: #EF5350;
+    --color-outline-variant: #424242; --color-scrim: #000000;
+}
+
+        /* Grey Palette - ИСПРАВЛЕНО: убран teal, добавлены настоящие серые тона */
+        [data-theme="grey-light"] {
+            --color-primary: #424242; --color-on-primary: #FFFFFF; --color-primary-container: #E0E0E0; --color-on-primary-container: #212121;
+            --color-secondary: #616161; --color-on-secondary: #FFFFFF; --color-secondary-container: #F5F5F5; --color-on-secondary-container: #424242;
+            --color-tertiary: #757575; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #EEEEEE; --color-on-tertiary-container: #424242;
+            --color-error: #D32F2F; --color-on-error: #FFFFFF; --color-error-container: #FFCDD2; --color-on-error-container: #B71C1C;
+            --color-background: #FAFAFA; --color-on-background: #212121; --color-surface: #FAFAFA; --color-on-surface: #212121;
+            --color-surface-variant: #F5F5F5; --color-on-surface-variant: #424242; --color-outline: #9E9E9E; --color-inverse-on-surface: #F5F5F5;
+            --color-inverse-surface: #303030; --color-inverse-primary: #9E9E9E; --color-shadow: #000000; --color-surface-tint: #424242;
+            --color-outline-variant: #BDBDBD; --color-scrim: #000000;
+        }
+        [data-theme="grey-dark"] {
+            --color-primary: #9E9E9E; --color-on-primary: #212121; --color-primary-container: #424242; --color-on-primary-container: #E0E0E0;
+            --color-secondary: #BDBDBD; --color-on-secondary: #424242; --color-secondary-container: #616161; --color-on-secondary-container: #F5F5F5;
+            --color-tertiary: #EEEEEE; --color-on-tertiary: #424242; --color-tertiary-container: #757575; --color-on-tertiary-container: #EEEEEE;
+            --color-error: #FF5722; --color-on-error: #B71C1C; --color-error-container: #D32F2F; --color-on-error-container: #FFCDD2;
+            --color-background: #121212; --color-on-background: #E0E0E0; --color-surface: #121212; --color-on-surface: #E0E0E0;
+            --color-surface-variant: #424242; --color-on-surface-variant: #BDBDBD; --color-outline: #757575; --color-inverse-on-surface: #121212;
+            --color-inverse-surface: #E0E0E0; --color-inverse-primary: #424242; --color-shadow: #000000; --color-surface-tint: #9E9E9E;
+            --color-outline-variant: #424242; --color-scrim: #000000;
+        }
+
+        /* Mint Palette */
+        [data-theme="mint-light"] {
+            --color-primary: #006A61; --color-on-primary: #FFFFFF; --color-primary-container: #70F7E5; --color-on-primary-container: #00201D;
+            --color-secondary: #4A635F; --color-on-secondary: #FFFFFF; --color-secondary-container: #CCE8E2; --color-on-secondary-container: #05201C;
+            --color-tertiary: #4A607C; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #D2E4FF; --color-on-tertiary-container: #001C36;
+            --color-error: #BA1A1A; --color-on-error: #FFFFFF; --color-error-container: #FFDAD6; --color-on-error-container: #410002;
+            --color-background: #FBFDFB; --color-on-background: #191C1B; --color-surface: #FBFDFB; --color-on-surface: #191C1B;
+            --color-surface-variant: #DAE5E1; --color-on-surface-variant: #3F4947; --color-outline: #6F7977; --color-inverse-on-surface: #EFF1F0;
+            --color-inverse-surface: #2E3130; --color-inverse-primary: #50DBCC; --color-shadow: #000000; --color-surface-tint: #006A61;
+            --color-outline-variant: #BCC9C5; --color-scrim: #000000;
+        }
+        [data-theme="mint-dark"] {
+            --color-primary: #50DBCC; --color-on-primary: #003732; --color-primary-container: #005049; --color-on-primary-container: #70F7E5;
+            --color-secondary: #B0CCC6; --color-on-secondary: #1C3531; --color-secondary-container: #334B47; --color-on-secondary-container: #CCE8E2;
+            --color-tertiary: #B2C9E9; --color-on-tertiary: #19314B; --color-tertiary-container: #334863; --color-on-tertiary-container: #D2E4FF;
+            --color-error: #FFB4AB; --color-on-error: #690005; --color-error-container: #93000A; --color-on-error-container: #FFDAD6;
+            --color-background: #191C1B; --color-on-background: #E0E3E0; --color-surface: #191C1B; --color-on-surface: #E0E3E0;
+            --color-surface-variant: #3F4947; --color-on-surface-variant: #BCC9C5; --color-outline: #899390; --color-inverse-on-surface: #191C1B;
+            --color-inverse-surface: #E0E3E0; --color-inverse-primary: #006A61; --color-shadow: #000000; --color-surface-tint: #50DBCC;
+            --color-outline-variant: #3F4947; --color-scrim: #000000;
+        }
+
+        /* Candy Palette (Default) */
+        [data-theme="candy-light"] {
+            --color-primary: #6750A4; --color-on-primary: #FFFFFF; --color-primary-container: #EADDFF; --color-on-primary-container: #21005D;
+            --color-secondary: #625B71; --color-on-secondary: #FFFFFF; --color-secondary-container: #E8DEF8; --color-on-secondary-container: #1D192B;
+            --color-tertiary: #7D5260; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #FFD8E4; --color-on-tertiary-container: #31111D;
+            --color-error: #B3261E; --color-on-error: #FFFFFF; --color-error-container: #F2B8B5; --color-on-error-container: #410E0B;
+            --color-background: #FFFBFE; --color-on-background: #1C1B1F; --color-surface: #FFFBFE; --color-on-surface: #1C1B1F;
+            --color-surface-variant: #E7E0EC; --color-on-surface-variant: #49454F; --color-outline: #79747E; --color-inverse-on-surface: #F4EFF4;
+            --color-inverse-surface: #313033; --color-inverse-primary: #D0BCFF; --color-shadow: #000000; --color-surface-tint: #6750A4;
+            --color-outline-variant: #CAC4D0; --color-scrim: #000000;
+        }
+        [data-theme="candy-dark"] {
+            --color-primary: #D0BCFF; --color-on-primary: #381E72; --color-primary-container: #4F378B; --color-on-primary-container: #EADDFF;
+            --color-secondary: #CCC2DC; --color-on-secondary: #332D41; --color-secondary-container: #4A4458; --color-on-secondary-container: #E8DEF8;
+            --color-tertiary: #EFB8C8; --color-on-tertiary: #492532; --color-tertiary-container: #633B48; --color-on-tertiary-container: #FFD8E4;
+            --color-error: #F2B8B5; --color-on-error: #601410; --color-error-container: #8C1D18; --color-on-error-container: #F2B8B5;
+            --color-background: #1C1B1F; --color-on-background: #E6E1E5; --color-surface: #1C1B1F; --color-on-surface: #E6E1E5;
+            --color-surface-variant: #49454F; --color-on-surface-variant: #CAC4D0; --color-outline: #938F99; --color-inverse-on-surface: #313033;
+            --color-inverse-surface: #E6E1E5; --color-inverse-primary: #6750A4; --color-shadow: #000000; --color-surface-tint: #D0BCFF;
+            --color-outline-variant: #49454F; --color-scrim: #000000;
+        }
+
+        /* Latte Palette */
+        [data-theme="latte-light"] {
+            --color-primary: #8C5500; --color-on-primary: #FFFFFF; --color-primary-container: #FFDBB8; --color-on-primary-container: #2D1800;
+            --color-secondary: #745A42; --color-on-secondary: #FFFFFF; --color-secondary-container: #FFDBB8; --color-on-secondary-container: #2A1806;
+            --color-tertiary: #5D6334; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #E3EBAD; --color-on-tertiary-container: #1A1E00;
+            --color-error: #BA1A1A; --color-on-error: #FFFFFF; --color-error-container: #FFDAD6; --color-on-error-container: #410002;
+            --color-background: #FFFBFF; --color-on-background: #1F1B16; --color-surface: #FFFBFF; --color-on-surface: #1F1B16;
+            --color-surface-variant: #EFE0D0; --color-on-surface-variant: #4F4539; --color-outline: #817568; --color-inverse-on-surface: #F8EFE7;
+            --color-inverse-surface: #34302A; --color-inverse-primary: #FFB86B; --color-shadow: #000000; --color-surface-tint: #8C5500;
+            --color-outline-variant: #D2C4B5; --color-scrim: #000000;
+        }
+        [data-theme="latte-dark"] {
+            --color-primary: #FFB86B; --color-on-primary: #4A2C00; --color-primary-container: #6B4000; --color-on-primary-container: #FFDBB8;
+            --color-secondary: #E3C0A2; --color-on-secondary: #422C18; --color-secondary-container: #5A422D; --color-on-secondary-container: #FFDBB8;
+            --color-tertiary: #C6CF93; --color-on-tertiary: #303509; --color-tertiary-container: #464C1E; --color-on-tertiary-container: #E3EBAD;
+            --color-error: #FFB4AB; --color-on-error: #690005; --color-error-container: #93000A; --color-on-error-container: #FFDAD6;
+            --color-background: #1F1B16; --color-on-background: #ECE0D9; --color-surface: #1F1B16; --color-on-surface: #ECE0D9;
+            --color-surface-variant: #4F4539; --color-on-surface-variant: #D2C4B5; --color-outline: #9C8F82; --color-inverse-on-surface: #1F1B16;
+            --color-inverse-surface: #ECE0D9; --color-inverse-primary: #8C5500; --color-shadow: #000000; --color-surface-tint: #FFB86B;
+            --color-outline-variant: #4F4539; --color-scrim: #000000;
+        }
+
+        /* Nautical Palette */
+        [data-theme="nautical-light"] {
+            --color-primary: #006781; --color-on-primary: #FFFFFF; --color-primary-container: #BFF2FF; --color-on-primary-container: #001F29;
+            --color-secondary: #4D616B; --color-on-secondary: #FFFFFF; --color-secondary-container: #D0E6F2; --color-on-secondary-container: #081E26;
+            --color-tertiary: #5C5B7E; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #E1DFFF; --color-on-tertiary-container: #181837;
+            --color-error: #BA1A1A; --color-on-error: #FFFFFF; --color-error-container: #FFDAD6; --color-on-error-container: #410002;
+            --color-background: #F8FDFF; --color-on-background: #001F29; --color-surface: #F8FDFF; --color-on-surface: #001F29;
+            --color-surface-variant: #DBE4E8; --color-on-surface-variant: #41484D; --color-outline: #71787C; --color-inverse-on-surface: #EFF1F4;
+            --color-inverse-surface: #2E3132; --color-inverse-primary: #75D1EC; --color-shadow: #000000; --color-surface-tint: #006781;
+            --color-outline-variant: #C1C8CB; --color-scrim: #000000;
+        }
+        [data-theme="nautical-dark"] {
+            --color-primary: #75D1EC; --color-on-primary: #003544; --color-primary-container: #004D62; --color-on-primary-container: #BFF2FF;
+            --color-secondary: #B4CAD6; --color-on-secondary: #20333C; --color-secondary-container: #364953; --color-on-secondary-container: #D0E6F2;
+            --color-tertiary: #C3C3EA; --color-on-tertiary: #2D2D4D; --color-tertiary-container: #444465; --color-on-tertiary-container: #E1DFFF;
+            --color-error: #FFB4AB; --color-on-error: #690005; --color-error-container: #93000A; --color-on-error-container: #FFDAD6;
+            --color-background: #001F29; --color-on-background: #E0E2E4; --color-surface: #001F29; --color-on-surface: #E0E2E4;
+            --color-surface-variant: #41484D; --color-on-surface-variant: #C1C8CB; --color-outline: #8B9296; --color-inverse-on-surface: #001F29;
+            --color-inverse-surface: #E0E2E4; --color-inverse-primary: #006781; --color-shadow: #000000; --color-surface-tint: #75D1EC;
+            --color-outline-variant: #41444d; --color-scrim: #000000;
+        }
+
+        /* Lavender Palette */
+        [data-theme="lavender-light"] {
+            --color-primary: #6D5B8D; --color-on-primary: #FFFFFF; --color-primary-container: #EDDCFF; --color-on-primary-container: #261746;
+            --color-secondary: #655A70; --color-on-secondary: #FFFFFF; --color-secondary-container: #EBDCF7; --color-on-secondary-container: #20182B;
+            --color-tertiary: #80525A; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #FFD9DE; --color-on-tertiary-container: #331118;
+            --color-error: #BA1A1A; --color-on-error: #FFFFFF; --color-error-container: #FFDAD6; --color-on-error-container: #410002;
+            --color-background: #FFFBFF; --color-on-background: #1D1B1E; --color-surface: #FFFBFF; --color-on-surface: #1D1B1E;
+            --color-surface-variant: #E7E0EB; --color-on-surface-variant: #49454E; --color-outline: #7A757F; --color-inverse-on-surface: #F5EFF3;
+            --color-inverse-surface: #323033; --color-inverse-primary: #D7BCFF; --color-shadow: #000000; --color-surface-tint: #6D5B8D;
+            --color-outline-variant: #CAC4D0; --color-scrim: #000000;
+        }
+        [data-theme="lavender-dark"] {
+            --color-primary: #D7BCFF; --color-on-primary: #3C2C5C; --color-primary-container: #544374; --color-on-primary-container: #EDDCFF;
+            --color-secondary: #CEC1DD; --color-on-secondary: #362D40; --color-secondary-container: #4D4357; --color-on-secondary-container: #EBDCF7;
+            --color-tertiary: #F3B8BE; --color-on-tertiary: #4B252C; --color-tertiary-container: #653B42; --color-on-tertiary-container: #FFD9DE;
+            --color-error: #FFB4AB; --color-on-error: #690005; --color-error-container: #93000A; --color-on-error-container: #FFDAD6;
+            --color-background: #1D1B1E; --color-on-background: #E6E1E6; --color-surface: #1D1B1E; --color-on-surface: #E6E1E6;
+            --color-surface-variant: #49454E; --color-on-surface-variant: #CAC4D0; --color-outline: #948F99; --color-inverse-on-surface: #1D1B1E;
+            --color-inverse-surface: #E6E1E6; --color-inverse-primary: #6D5B8D; --color-shadow: #000000; --color-surface-tint: #D7BCFF;
+            --color-outline-variant: #49454E; --color-scrim: #000000;
+        }
+
+        /* Evergreen Palette */
+        [data-theme="evergreen-light"] {
+            --color-primary: #006D40; --color-on-primary: #FFFFFF; --color-primary-container: #6AFCA1; --color-on-primary-container: #002111;
+            --color-secondary: #4F6354; --color-on-secondary: #FFFFFF; --color-secondary-container: #D1E8D5; --color-on-secondary-container: #0C1F14;
+            --color-tertiary: #3E636E; --color-on-tertiary: #FFFFFF; --color-tertiary-container: #C1E8F6; --color-on-tertiary-container: #001F26;
+            --color-error: #BA1A1A; --color-on-error: #FFFFFF; --color-error-container: #FFDAD6; --color-on-error-container: #410002;
+            --color-background: #FBFDF7; --color-on-background: #1A1C19; --color-surface: #FBFDF7; --color-on-surface: #1A1C19;
+            --color-surface-variant: #DEE5DA; --color-on-surface-variant: #424940; --color-outline: #72796F; --color-inverse-on-surface: #F0F1EB;
+            --color-inverse-surface: #2F312D; --color-inverse-primary: #50DB87; --color-shadow: #000000; --color-surface-tint: #006D40;
+            --color-outline-variant: #C2C9BE; --color-scrim: #000000;
+        }
+        [data-theme="evergreen-dark"] {
+            --color-primary: #50DB87; --color-on-primary: #00391F; --color-primary-container: #00522F; --color-on-primary-container: #6AFCA1;
+            --color-secondary: #B5CCBA; --color-on-secondary: #223428; --color-secondary-container: #384B3E; --color-on-secondary-container: #D1E8D5;
+            --color-tertiary: #A5CCD9; --color-on-tertiary: #07353E; --color-tertiary-container: #254C56; --color-on-tertiary-container: #C1E8F6;
+            --color-error: #FFB4AB; --color-on-error: #690005; --color-error-container: #93000A; --color-on-error-container: #FFDAD6;
+            --color-background: #1A1C19; --color-on-background: #E2E3DD; --color-surface: #1A1C19; --color-on-surface: #E2E3DD;
+            --color-surface-variant: #424940; --color-on-surface-variant: #C2C9BE; --color-outline: #8B9389; --color-inverse-on-surface: #1A1C19;
+            --color-inverse-surface: #E2E3DD; --color-inverse-primary: #006D40; --color-shadow: #000000; --color-surface-tint: #50DB87;
+            --color-outline-variant: #424940; --color-scrim: #000000;
+        }
+
+        /* AppBar - верхняя панель */
+        .appbar {
+            background-color: var(--color-primary-container);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 4rem;
+            width: 100%;
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .appbar-start-box,
+        .appbar-end-box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .appbar-heading {
+            font-size: large;
+            color: var(--color-on-primary-container);
+        }
+
+        /* Buttons - Кнопки */
+        .btn {
+            background-color: var(--color-primary);
+            border: 0.0625rem solid var(--color-outline);
+            border-radius: 0.625rem;
+            height: 2.5rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            font-size: medium;
+            font-weight: 500;
+            color: var(--color-on-primary);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .btn-tonal {
+            background-color: var(--color-secondary-container);
+            color: var(--color-on-secondary-container);
+            border: none;
+        }
+
+        .btn-tonal:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-on-secondary);
+        }
+
+        .btn-elevated {
+            background-color: var(--color-surface);
+            color: var(--color-primary);
+            border: none;
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-elevated:hover {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outlined {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 0.0625rem solid var(--color-outline);
+        }
+
+        .btn-outlined:hover {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            border-color: var(--color-primary);
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: none;
+        }
+
+        .btn-ghost:hover {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .btn-appbar {
+            background-color: transparent;
+            border: none;
+            color: var(--color-on-primary-container);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .btn-appbar:hover {
+            background-color: var(--color-primary);
+        }
+
+        /* Стили для кнопок только с иконками */
+        .btn-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            min-width: auto;
+        }
+
+        /* Карточки */
+        .card {
+            background-color: var(--color-surface);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08);
+            color: var(--color-on-surface);
+            width: 100%;
+        }
+
+        /* Заголовки карточек используют основной цвет */
+        .card h2 {
+            color: var(--color-primary) !important;
+        }
+
+        /* Elevated карточки */
+        .card-elevated {
+            background-color: var(--color-surface-variant);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 0px 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Outlined карточки */
+        .card-outlined {
+            background-color: transparent;
+            border: 0.0625rem solid var(--color-outline);
+            box-shadow: none;
+        }
+
+        /* Ошибка карточка */
+        #error-message {
+            background-color: var(--color-error-container);
+            color: var(--color-on-error-container);
+            border: 1px solid var(--color-error);
+        }
+
+        #error-message h2 {
+            color: var(--color-error) !important;
+        }
+
+        /* Menu */
+        .menu-overflow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 200;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        .menu-overflow.active {
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        .menu-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-scrim);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-overflow.active .menu-overlay {
+            opacity: 0.32;
+        }
+
+        .menu {
+            background-color: var(--color-surface);
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+            box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3), 0px -6px 10px 2px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 90vh;
+            padding: 0.5rem;
+            gap: 0.25rem;
+            color: var(--color-on-surface);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 201;
+        }
+
+        .menu-overflow.active .menu {
+            transform: translateY(0);
+        }
+        
+        /* Menu Grab Handle */
+        .menu::before {
+            content: '';
+            position: absolute;
+            top: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2rem;
+            height: 0.25rem;
+            background-color: var(--color-outline-variant);
+            border-radius: 99px;
+        }
+
+        .menu h3 {
+            padding-top: 1.5rem;
+        }
+
+        .menu label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.75rem;
+            height: 3rem;
+            padding: 0 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .menu label:hover {
+            background-color: var(--color-surface-variant);
+        }
+
+        .menu label .material-symbols-outlined {
+            font-size: large;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Toggle Button Styles (for settings radios) */
+        .toggle-button-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-duration: 200ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--color-on-surface-variant);
+            border: 1px solid var(--color-outline);
+            background-color: var(--color-surface);
+            flex-grow: 1;
+            border-radius: 0;
+        }
+        .toggle-button-label:first-child { border-top-left-radius: 9999px; border-bottom-left-radius: 9999px; margin-left: -1px; }
+        .toggle-button-label:last-child { border-top-right-radius: 9999px; border-bottom-right-radius: 9999px; }
+        .toggle-button-label + .toggle-button-label {
+            margin-left: -1px;
+        }
+        .toggle-button {
+            display: none;
+        }
+        .toggle-button-label span:not(.material-symbols-outlined) {
+            margin-left: 0.5rem;
+        }
+        .toggle-button:checked + .toggle-button-label {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            border-color: var(--color-primary-container);
+            z-index: 1;
+        }
+
+        /* Special styling for the 'check' indicator for palette */
+        .palette-check-indicator {
+            display: none;
+            font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+        input[name="palette-group"]:checked + label .palette-check-indicator,
+        input[name="lang-group"]:checked + label .palette-check-indicator {
+            display: inline;
+        }
+         input[name="palette-group"] + label,
+         input[name="lang-group"] + label {
+            flex-grow: 1;
+         }
+
+        /* Copy confirmation message */
+        .copy-confirmation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-inverse-surface);
+            color: var(--color-inverse-on-surface);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 1500;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-confirmation.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* User status badges */
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        .badge-active { background-color: var(--color-primary-container); color: var(--color-on-primary-container); }
+        .badge-disabled { background-color: var(--color-error-container); color: var(--color-on-error-container); }
+        .badge-limited { background-color: var(--color-secondary-container); color: var(--color-on-secondary-container); }
+        .badge-expired { background-color: var(--color-outline-variant); color: var(--color-on-surface-variant); }
+
+        /* Icon styling for app import buttons */
+        .app-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--color-primary-container);
+            border-radius: 0.5rem;
+            color: var(--color-on-primary-container);
+        }
+
+        .app-icon-container .material-symbols-outlined {
+            font-size: 1.5rem;
+        }
+
+        /* OS Tabs */
+        .os-tab {
+            padding: 0.25rem 0.75rem;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            color: var(--color-on-surface-variant);
+            font-weight: 500;
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        .os-tab.active {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .os-content {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .os-content.active {
+            display: flex;
+        }
+
+        /* Dropdown/Select for Apps */
+        .app-select-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-outline);
+            border-radius: 0.625rem;
+            background-color: var(--color-surface-variant);
+            color: var(--color-on-surface);
+            font-size: 1rem;
+            cursor: pointer;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+            pointer-events: none;
+        }
+
+        .app-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px var(--color-primary-container);
+        }
+
+        /* Кликабельная область для открытия модала */
+        .app-select-trigger {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        /* Модальное окно выбора приложения */
+        .app-select-modal {
+            position: fixed;
+            z-index: 2020;
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            background: rgba(0,0,0,0.25);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px; /* ДОБАВЛЕНО: отступы для мобильных */
+        }
+
+        .app-select-modal.active {
+            display: flex;
+        }
+
+        .app-select-content {
+            background: var(--color-surface);
+            border-radius: 1.5rem;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.13);
+            min-width: 320px;
+            max-width: 92vw;
+            max-height: calc(100vh - 32px); /* ИЗМЕНЕНО: учитываем отступы */
+            padding: 1.5rem; /* ИЗМЕНЕНО */
+            position: relative;
+            color: var(--color-on-surface);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+        }
+
+        .app-select-close {
+            position: static; /* ИЗМЕНЕНО */
+            color: var(--color-on-surface-variant);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .app-select-close:hover { 
+            color: var(--color-primary); 
+        }
+
+        .app-select-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 0; /* ИЗМЕНЕНО */
+            padding-right: 0; /* ИЗМЕНЕНО */
+            flex-grow: 1; /* ДОБАВЛЕНО */
+        }
+
+        .app-select-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .app-select-option {
+            appearance: none;
+            outline: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            border-radius: 2rem;
+            background: var(--color-surface-variant);
+            color: var(--color-on-surface-variant);
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.75rem 1.3rem;
+            transition: background 0.2s, color 0.2s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            text-align: left;
+        }
+
+        .app-select-option:hover {
+            background: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .app-select-option.selected {
+            background: var(--color-primary);
+            color: var(--color-on-primary);
+            border-color: var(--color-primary);
+        }
+
+        .app-select-option .material-symbols-outlined {
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 480px) {
+            .app-select-content {
+                min-width: unset;
+                width: 96vw;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+            }
+            
+            .app-select-option {
+                padding: 0.75rem 1rem;
+                justify-content: center;
+            }
+        }
+
+        .app-details-container {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .app-detail-section h4 {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+
+        .app-detail-section p {
+            font-size: 0.9em;
+            color: var(--color-on-surface-variant);
+            margin-bottom: 0.75rem;
+        }
+
+        .app-detail-section .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ИСПРАВЛЕНО: Стили для кнопок приложений с цветом палитры как AppBar */
+        .app-button {
+            background: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            border: 2px solid var(--color-primary-container);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .app-button:hover {
+            background: var(--color-primary);
+            color: var(--color-on-primary);
+            border-color: var(--color-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-button .material-symbols-outlined {
+            font-size: 1.1em;
+        }
+
+        /* Переопределяем стили для кнопок в контейнере приложений */
+        .app-detail-section .buttons-container .app-button {
+            flex: none;
+        }
+
+        .app-step-buttons .app-button {
+            font-size: 0.9rem;
+            padding: 0.75rem 1rem;
+        }
+
+        /* Стили для шагов приложений */
+        .app-steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .app-step {
+            border: 1px solid var(--color-outline-variant);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background-color: var(--color-surface-variant);
+        }
+
+        .app-step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-on-surface);
+            margin-bottom: 0.5rem;
+        }
+
+        .app-step-description {
+            font-size: 0.9rem;
+            color: var(--color-on-surface-variant);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .app-step-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Стили для серверов в разделе ссылок */
+        .server-card {
+            background-color: var(--color-surface-variant);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--color-outline-variant);
+        }
+
+        .server-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .server-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .server-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-on-surface);
+        }
+
+        .server-index {
+            display: none;
+        }
+
+        .server-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Loader */
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+
+        /* ИСПРАВЛЕНО: Интервалы в настройках с отступами между группами */
+        .settings-section {
+            margin-bottom: 1.2rem;
+        }
+
+        .settings-label {
+            display: block;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 0.6rem;
+            color: var(--color-on-surface-variant);
+        }
+
+        .settings-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .settings-radio-btn {
+            appearance: none;
+            outline: none;
+            border: none;
+            padding: 0.6rem 0.8rem;
+            margin: 0;
+            cursor: pointer;
+            border-radius: 2rem;
+            background: var(--color-surface-variant);
+            color: var(--color-on-surface-variant);
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s, color 0.2s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex: 1;
+            min-width: calc(50% - 0.25rem);
+            justify-content: center;
+        }
+
+        .settings-radio-btn.selected {
+            background: var(--color-primary);
+            color: var(--color-on-primary);
+            border-color: var(--color-primary);
+        }
+
+        .settings-radio-btn .material-symbols-outlined {
+            font-size: 1em;
+        }
+
+        /* Красивая секция настроек */
+        #settings-modal {
+            position: fixed;
+            z-index: 2010;
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            background: rgba(0,0,0,0.25);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px; /* ДОБАВЛЕНО: отступы для мобильных */
+        }
+
+        #settings-modal.active {
+            display: flex;
+        }
+
+        .settings-content {
+            background: var(--color-surface);
+            border-radius: 1.5rem;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.13);
+            min-width: 320px;
+            max-width: 92vw;
+            max-height: calc(100vh - 32px); /* ИЗМЕНЕНО: учитываем отступы */
+            padding: 1.5rem; /* ИЗМЕНЕНО */
+            position: relative;
+            color: var(--color-on-surface);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            overflow-y: auto; /* ДОБАВЛЕНО: прокрутка если контент большой */
+        }
+        .settings-close {
+            position: static; /* ИЗМЕНЕНО */
+            color: var(--color-on-surface-variant);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        .settings-close:hover { color: var(--color-primary); }
+        .settings-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 0; /* ИЗМЕНЕНО */
+            flex-grow: 1; /* ДОБАВЛЕНО */
+        }
+
+        @media (max-width: 480px) {
+            #settings-modal,
+            .app-select-modal {
+                padding: 20px;
+            }
+            
+            .settings-content,
+            .app-select-content {
+                max-height: calc(100vh - 40px);
+            }
+
+            .settings-content {
+                min-width: unset;
+                width: 96vw;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+                gap: 1rem;
+            }
+            
+            .app-select-content {
+                min-width: unset;
+                width: 96vw;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+            }
+            
+            .settings-section {
+                margin-bottom: 1rem;
+            }
+            
+            .app-select-option {
+                padding: 0.75rem 1rem;
+                justify-content: center;
+            }
+
+            /* Кнопки настроек остаются в два столбца на мобильных */
+            .settings-radio-btn {
+                min-width: calc(50% - 0.25rem);
+                padding: 0.5rem 0.4rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ДОБАВЛЕНО: Еще больше отступов для очень маленьких экранов */
+        @media (max-width: 360px) {
+            #settings-modal,
+            .app-select-modal {
+                padding: 24px; /* Максимальные отступы для самых маленьких экранов */
+            }
+            
+            .settings-content,
+            .app-select-content {
+                max-height: calc(100vh - 48px);
+                padding: 16px;
+            }
+
+            /* Переходим в один столбец только на очень маленьких экранах */
+            .settings-radio-btn {
+                min-width: 100%;
+                flex: none;
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ УМЕНЬШЕНИЯ ИНТЕРВАЛОВ */
+        #apps-section h2 {
+            margin-bottom: 0.75rem !important;
+        }
+
+        #apps-section .flex.justify-center {
+            margin-bottom: 0.75rem !important;
+        }
+
+        /* ДОБАВЛЕНО: Поддержка emoji флагов для Windows в subscription-links-card */
+        #subscription-links-card {
+            font-family: "Twemoji Country Flags", 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        /* ИСПРАВЛЕНО: QR modal всегда светлый */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; 
+            top: 0; 
+            width: 100vw; 
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { 
+            display: flex; 
+        }
+
+        .modal-content {
+            background: #FFFFFF; /* Всегда белый фон */
+            margin: auto;
+            padding: 1.5rem; /* ИЗМЕНЕНО */
+            border-radius: 1rem;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.21);
+            min-width: 260px;
+            max-width: 90vw;
+            text-align: center;
+            position: relative;
+            color: #1C1B1F; /* Всегда темный текст */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close-button {
+            position: static; /* ИЗМЕНЕНО */
+            font-size: 2em;
+            color: #49454F; /* Всегда серый текст */
+            cursor: pointer;
+            line-height: 1; /* ДОБАВЛЕНО */
+        }
+
+        .modal-close-button:hover { 
+            color: #6750A4; /* Всегда фиолетовый при hover */
+        }
+
+        #qr-modal-title {
+            margin-bottom: 0; /* ИЗМЕНЕНО */
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1C1B1F; /* Всегда темный текст */
+            flex-grow: 1; /* ДОБАВЛЕНО */
+            text-align: left; /* ДОБАВЛЕНО */
+            padding-left: 0.5rem; /* ДОБАВЛЕНО */
+        }
+
+        #qr-code-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        /* Центрируем QR код внутри контейнера */
+        #qr-code-container > div {
+            margin: 0 auto;
+        }
+
+        #qr-code-container canvas,
+        #qr-code-container img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* NavBar - Нижняя навигация */
+        .navbar {
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--color-outline-variant);
+            display: flex;
+            justify-content: center;
+            height: 5rem;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            max-width: 32rem;
+            padding: 0 1rem;
+        }
+
+        .navbar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background-color: transparent;
+            color: var(--color-on-surface-variant);
+            border: none;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            min-width: 4rem;
+            height: 4rem;
+        }
+
+        .navbar-item:hover {
+            background-color: var(--color-surface-variant);
+        }
+
+        .navbar-item-active {
+            background-color: var(--color-secondary-container);
+            color: var(--color-on-secondary-container);
+        }
+
+        .navbar-item .material-symbols-outlined {
+            font-size: 1.5rem;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .navbar-item-active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Стили для мобильной адаптивности */
+        @media (max-width: 640px) {
+            .appbar {
+                padding: 0 1rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                margin: 0 1rem;
+            }
+            
+            .navbar-container {
+                padding: 0 0.5rem;
+            }
+            
+            .navbar-item {
+                min-width: 3rem;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* === НОВЫЕ СТИЛИ ДЛЯ ИСПРАВЛЕНИЯ ЗАГОЛОВКОВ МОДАЛЬНЫХ ОКОН === */
+        .modal-header, .settings-header, .app-select-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1rem; /* Единый отступ для всех */
+        }
+        /* === КОНЕЦ НОВЫХ СТИЛЕЙ === */
+    </style>
+</head>
+<body data-theme="candy-dark"> <div class="appbar fixed top-0 z-1">
+        <div class="appbar-start-box">
+            <span id="title" class="appbar-heading ml-6" data-i18n="page_title">Подписка</span>
+        </div>
+        <div class="appbar-end-box">
+    <button id="qr-appbar-button" class="btn btn-appbar p-3 mr-2 hidden">
+        <span class="material-symbols-outlined align-middle">qr_code_2</span>
+    </button>
+    <button id="settings-button" class="btn btn-appbar p-3 mr-2" style="position: fixed; top: 12px; right: 16px;z-index:1001;">
+        <span class="material-symbols-outlined align-middle">settings</span>
+    </button>
+        </div>
+    </div>
+
+    <div id="pages" class="flex flex-col pt-16 pb-20 select-none items-center w-full px-4">
+
+    <div id="status-section" class="flex flex-col items-center gap-8 py-8 w-full max-w-4xl">
+    
+    <div id="user-info-card" class="card w-full max-w-[36rem] p-6 hidden">
+        <h2 class="text-xl font-bold text-[var(--color-primary)]" data-i18n="user_info_title">Информация о пользователе</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="username_label">Имя пользователя:</span>
+                <span id="display-username" class="text-lg font-medium text-[var(--color-on-surface)]"></span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="status_label">Статус:</span>
+                <span id="display-user-status" class="text-lg font-medium badge"></span>
+            </div>
+            <div id="expires-field" class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="expires_at_label">Срок действия:</span>
+                <span id="display-expires-at" class="text-lg font-medium text-[var(--color-on-surface)]"></span>
+            </div>
+            <div id="days-left-field" class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="days_left_label">Дней осталось:</span>
+                <span id="display-days-left" class="text-lg font-medium text-[var(--color-on-surface)]"></span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="traffic_label">Трафик:</span>
+                <span id="display-traffic" class="text-lg font-medium text-[var(--color-on-surface)]"></span>
+            </div>
+            <div id="traffic-reset-field" class="flex flex-col">
+                <span class="text-sm opacity-70" data-i18n="traffic_reset_strategy_label">Сброс трафика:</span>
+                <span id="display-traffic-reset-strategy" class="text-lg font-medium text-[var(--color-on-surface)]"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div id="apps-section" class="flex flex-col items-center gap-8 py-8 w-full max-w-4xl hidden">
+    
+    <div class="flex justify-center w-full">
+        <div id="os-tabs" class="flex gap-4">
+            </div>
+    </div>
+
+    <div id="os-app-display" class="w-full max-w-[36rem]">
+        </div>
+
+</div>
+
+    <div id="links-section" class="flex flex-col items-center gap-8 py-8 w-full max-w-4xl hidden">
+    
+    <div id="subscription-links-card" class="card w-full max-w-[36rem] p-6 hidden">
+        <h2 class="text-xl font-bold text-[var(--color-primary)]" data-i18n="subscription_links_title">Ссылки подписки</h2>
+        <div class="flex flex-col gap-4 mt-4">
+            
+            <div class="server-card">
+                <div class="server-header">
+                    <div class="server-info">
+                        <span class="server-name" data-i18n="subscription_link_label">Ссылка подписки</span>
+                    </div>
+                    <div class="server-actions">
+                        <button class="btn btn-tonal btn-icon" onclick="copyToClipboard(window.subscriptionUrlForCopy || '')">
+                            <span class="material-symbols-outlined">content_copy</span>
+                        </button>
+                        <button class="btn btn-tonal btn-icon" onclick="showQRCode(window.subscriptionUrlForCopy || '', getTranslation('subscription_link_label') || 'Ссылка подписки')">
+                            <span class="material-symbols-outlined">qr_code_2</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="fragment-links-container" class="flex flex-col gap-3">
+                </div>
+
+        </div>
+    </div>
+
+</div>
+
+    <div id="loading-spinner" class="flex flex-col items-center justify-center h-48 w-full">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-[var(--color-primary)] border-solid border-r-transparent"></div>
+        <p class="mt-4 text-lg text-[var(--color-on-surface-variant)]" data-i18n="loading_data">Загрузка данных подписки...</p>
+    </div>
+
+    <div id="error-message" class="card card-elevated w-full max-w-[36rem] p-6 text-center hidden">
+        <h2 class="text-xl font-bold text-[var(--color-error)]" data-i18n="error_title">Ошибка</h2>
+        <p id="error-text" class="mt-2 text-[var(--color-on-surface-variant)]"></p>
+    </div>
+
+</div>
+
+<div id="qr-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="qr-modal-title">QR-код</h3>
+            <span class="modal-close-button" onclick="closeQRModal()">&times;</span>
+        </div>
+        <div id="qr-code-container" style="margin: 20px auto;"></div>
+    </div>
+</div>
+
+<div id="copy-notification" class="copy-confirmation">
+    <span data-i18n="copied_to_clipboard">Скопировано в буфер обмена!</span>
+</div>
+
+<div id="settings-modal">
+    <div class="settings-content">
+        <div class="settings-header">
+            <h3 class="settings-title" data-i18n="settings_title">Настройки</h3>
+            <span class="settings-close material-symbols-outlined" onclick="closeSettingsModal()">close</span>
+        </div>
+
+        <div class="settings-section">
+            <span class="settings-label" data-i18n="language_label">Язык:</span>
+            <div class="settings-btn-group">
+                <button class="settings-radio-btn" data-language="ru" onclick="selectLanguage('ru')">
+                    <span class="material-symbols-outlined">language</span>
+                    <span>Русский</span>
+                </button>
+                <button class="settings-radio-btn" data-language="en" onclick="selectLanguage('en')">
+                    <span class="material-symbols-outlined">language</span>
+                    <span>English</span>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="settings-section">
+            <span class="settings-label" data-i18n="brightness_label">Яркость:</span>
+            <div class="settings-btn-group">
+                <button class="settings-radio-btn" data-brightness="light" onclick="selectBrightness('light')">
+                    <span class="material-symbols-outlined">light_mode</span>
+                    <span data-i18n="light_mode">Светлая</span>
+                </button>
+                <button class="settings-radio-btn" data-brightness="dark" onclick="selectBrightness('dark')">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                    <span data-i18n="dark_mode">Тёмная</span>
+                </button>
+                <button class="settings-radio-btn" data-brightness="auto" onclick="selectBrightness('auto')">
+                    <span class="material-symbols-outlined">brightness_auto</span>
+                    <span data-i18n="auto_mode">Авто</span>
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="settings-section">
+            <span class="settings-label" data-i18n="theme_label">Цветовая схема:</span>
+            <div class="settings-btn-group">
+                <button class="settings-radio-btn" data-palette="candy" onclick="selectPalette('candy')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="candy_theme">Candy</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="mint" onclick="selectPalette('mint')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="mint_theme">Mint</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="latte" onclick="selectPalette('latte')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="latte_theme">Latte</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="nautical" onclick="selectPalette('nautical')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="nautical_theme">Nautical</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="lavender" onclick="selectPalette('lavender')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="lavender_theme">Lavender</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="evergreen" onclick="selectPalette('evergreen')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="evergreen_theme">Evergreen</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="red" onclick="selectPalette('red')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="red_theme">Красная</span>
+                </button>
+                <button class="settings-radio-btn" data-palette="grey" onclick="selectPalette('grey')">
+                    <span class="material-symbols-outlined">palette</span>
+                    <span data-i18n="grey_theme">Серая</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="navbar fixed bottom-0 z-10">
+    <div class="navbar-container">
+        <button id="navbar-status" class="navbar-item navbar-item-active" onclick="setPage('navbar-status','status-section');">
+            <div class="navbar-item-icon">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+            <span data-i18n="nav_status">Статус</span>
+        </button>
+
+        <button id="navbar-apps" class="navbar-item" onclick="setPage('navbar-apps','apps-section');">
+            <div class="navbar-item-icon">
+                <span class="material-symbols-outlined">apps</span>
+            </div>
+            <span data-i18n="nav_apps">Приложения</span>
+        </button>
+
+        <button id="navbar-links" class="navbar-item" onclick="setPage('navbar-links','links-section');">
+            <div class="navbar-item-icon">
+                <span class="material-symbols-outlined">link</span>
+            </div>
+            <span data-i18n="nav_links">Ссылки</span>
+        </button>
+    </div>
+</div>
+<script>
+    // Глобальные переменные
+    let currentTheme = 'candy';
+    let currentBrightness = 'auto';
+    let currentLanguage = 'ru';
+    let currentSectionId = 'status-section'; // ИСПРАВЛЕНО: реальная стартовая секция
+    let appsConfig = null; // Глобальная переменная для конфигурации
+
+    // Список доступных палитр
+    const availablePalettes = ['candy', 'mint', 'latte', 'nautical', 'lavender', 'evergreen', 'red', 'grey'];
+
+    // Функция для случайного выбора палитры
+    function getRandomPalette() {
+        return availablePalettes[Math.floor(Math.random() * availablePalettes.length)];
+    }
+
+    // SVG иконки для приложений
+    const appIcons = {
+        'happ': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M13.4,19.6l-7.9,7.9L5,30.4h6.6L13.4,19.6z" />
+            <path d="M13.2,13.5L14.6,5l-7.9,7.9L4.2,27.4l7.9-7.9l0.2-1.2h1l4.9-4.9H13.2z" />
+            <path d="M25.4,19.6L27.8,5l-7.9,7.9l-0.1,0.7h-0.6l-4.9,4.9h4.7l-1.5,9L25.4,19.6z" />
+            <path d="M18.7,27.5l-0.5,2.9h6.6l1.8-10.8L18.7,27.5z" />
+            <path d="M13.6,4.9l0.6-3.3H7.5L5.6,12.8L13.6,4.9z" />
+            <path d="M18.8,12.8l7.9-7.9l0.6-3.3h-6.6L18.8,12.8z" />
+        </svg>`,
+        'sing-box': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M27 20.5C27.6076 20.1302 27.9978 19.2655 28 18.6463V9C28 9 28.0078 8.59766 27.5822 8.32719L14.9796 0.450533C14.9796 0.450533 13.5 -0.5 12.0584 0.450533L0.561526 8.12545C0.0257112 8.49456 0.00389706 9.16105 0.00389706 9.16105L-6.01943e-06 18.5C-6.01943e-06 18.5 -0.0137371 19.6716 0.499994 20L13 28L13.0471 17.0006L0.88928 9.30661C0.88928 9.30661 0.3336 8.95514 1.04756 8.54689L12.5 1C13.5318 0.372263 14.5593 0.970586 14.5593 0.970586L27.1156 8.65768C27.7201 8.91105 27.2738 9.10085 27.2738 9.10085L24.425 10.9058C24.425 10.9058 24.0203 11.2628 23.537 11.0184L10.5108 2.93515L10.0302 3.25102L23.5 11.5V15C23.5 15.5 23.1385 15.7448 23.1385 15.7448L19.3613 18.2599C19.3613 18.2599 19.014 18.5106 19 18V14.5L5.58401 6.16018L5.04136 6.52891L18.0774 14.6876C18.0774 14.6876 18.4613 14.8944 18.0216 15.133L14.7019 17.1149V27C14.7019 27 14.6993 27.637 14 28C14 28 14.5208 28.1278 15.4667 27.5678L27 20.5Z"/>
+        </svg>`,
+        'streisand': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M18.4091 4.40211C19.8954 3.36294 21.3589 2.33315 22.8308 1.31461C23.3975 0.92258 23.9623 0.519918 24.5701 0.193536C24.8231 0.0578559 25.1956 0.0522285 25.495 0.0991225C25.68 0.127884 25.9192 0.345472 25.9663 0.519917C26.0074 0.671229 25.8617 0.936336 25.7146 1.05576C25.1819 1.48843 24.6178 1.88735 24.057 2.28813C22.6504 3.29229 21.2386 4.29082 19.7483 5.34812C20.3673 5.74203 20.9353 6.11718 21.5177 6.47045C22.1713 6.86686 22.1811 6.86373 22.8151 6.4073C24.4106 5.25746 25.9944 4.09324 27.601 2.95715C27.8768 2.76207 28.2298 2.61639 28.5657 2.56825C28.7586 2.54073 29.1069 2.7108 29.1723 2.87087C29.2455 3.05094 29.1566 3.40546 29.0017 3.53614C28.2441 4.17577 27.452 4.77851 26.6519 5.37063C25.6048 6.14594 24.5394 6.89875 23.4224 7.70407C23.6577 7.87227 23.8747 8.00732 24.0662 8.16989C24.5976 8.62069 25.1852 9.03023 25.6264 9.55294C26.2885 10.337 26.3205 11.3374 26.3101 12.2897C26.2963 13.5689 26.2022 14.8501 26.0865 16.1256C26.0264 16.7877 25.5133 17.2348 25.0329 17.6618C24.7734 17.8919 24.4721 18.0814 24.178 18.2727C23.8786 18.4678 23.9047 18.626 24.1819 18.8217C25.4623 19.7277 26.7382 20.6399 28.0102 21.5565C28.3553 21.8048 28.688 22.0705 29.0148 22.3406C29.237 22.5244 29.4194 22.7439 29.2520 23.0459C29.0867 23.3441 28.7834 23.5023 28.4683 23.4092C28.1115 23.3035 27.767 23.1128 27.4618 22.9002C26.0303 21.9011 24.6159 20.8800 23.1897 19.8734C23.0112 19.7477 22.8099 19.6439 22.6047 19.5632C22.3027 19.4444 22.0491 19.3975 21.7458 19.6864C21.3432 20.0697 20.834 20.3529 20.3569 20.6599C20.0667 20.8463 20.1372 20.9832 20.3693 21.1439C21.7667 22.1149 23.1766 23.0703 24.5512 24.0707C25.0937 24.4658 25.8002 24.7147 26.0539 25.4131C26.0728 25.4650 26.0905 25.5169 26.1133 25.5819C25.8650 25.7063 25.6336 25.8352 25.3917 25.9408C25.0414 26.0940 24.7544 25.9221 24.4819 25.7401C23.2609 24.9248 22.0445 24.1032 20.8229 23.2885C20.1778 22.8590 19.5215 22.4450 18.8784 22.0124C18.6457 21.8554 18.4868 21.8923 18.2568 22.0505C17.4142 22.6295 16.6109 23.2716 15.5913 23.5767C14.5814 23.8794 13.6448 23.7093 12.7702 23.1972C12.1885 22.8564 11.6284 22.4775 11.0832 22.0849C10.7858 21.8704 10.5538 21.8629 10.2538 22.0730C8.76157 23.1141 7.25889 24.1413 5.75882 25.1718C5.45619 25.3793 5.17317 25.6388 4.83656 25.7683C4.52674 25.8870 4.15417 25.9039 3.81494 25.8827C3.65742 25.8727 3.39139 25.6682 3.38943 25.5482C3.38486 25.3231 3.46656 25.0111 3.63519 24.8816C4.41301 24.2845 5.23331 23.7381 6.03792 23.1735C6.98698 22.5082 7.93735 21.8435 8.88511 21.1758C9.01191 21.0864 9.12564 20.9801 9.27597 20.8563C8.77856 20.4999 8.32560 20.1741 7.87133 19.8502C7.68832 19.7196 7.51838 19.5557 7.31314 19.4713C6.88371 19.2944 6.54709 19.5514 6.23204 19.7733C4.68361 20.8631 3.15151 21.9742 1.59262 23.0497C1.33313 23.2285 0.971023 23.3341 0.651401 23.3454C0.466425 23.3516 0.186020 23.1353 0.108239 22.9559C0.0454907 22.8114 0.159222 22.4963 0.303019 22.3863C1.44555 21.5084 2.61293 20.6606 3.77442 19.8052C4.24699 19.4576 4.71956 19.1093 5.19801 18.7698C5.42547 18.6085 5.42482 18.4559 5.22023 18.2846C4.97447 18.0783 4.75028 17.8400 4.48033 17.6694C3.55676 17.0854 3.24694 16.2125 3.22603 15.2265C3.19661 13.8559 3.19335 12.4841 3.22603 11.1142C3.24825 10.1794 3.68879 9.42102 4.47445 8.84954C4.88885 8.54816 5.29083 8.23054 5.69738 7.91916C5.92027 7.74847 5.95099 7.64217 5.66797 7.44522C4.02933 6.30538 2.41030 5.13929 0.789315 3.97632C0.599111 3.84001 0.427861 3.67744 0.261841 3.51488C-0.163669 3.09846 -0.0682397 2.68892 0.531134 2.59388C0.831147 2.54636 1.23117 2.63640 1.48020 2.80647C2.87568 3.75685 4.23784 4.75225 5.61306 5.72952C6.05557 6.04403 6.51049 6.34290 6.94580 6.66553C7.25104 6.89187 7.49811 6.68303 7.71446 6.56174C8.19880 6.28975 8.64784 5.96149 9.11387 5.65887C9.48121 5.42002 9.49559 5.32311 9.14459 5.06863C7.39876 3.80312 5.64836 2.54324 3.89991 1.28148C3.87638 1.26459 3.84958 1.25084 3.82540 1.23396C3.51689 1.01387 3.22080 0.768143 3.38682 0.354851C3.50382 0.0634829 4.18163 -0.109712 4.54765 0.078489C5.03003 0.326714 5.49280 0.616207 5.93530 0.925707C7.46151 1.99364 8.97792 3.07408 10.4917 4.15826C10.7394 4.33521 10.9584 4.37022 11.2192 4.19640C11.5970 3.94505 12.0107 3.73747 12.3657 3.46048C13.6932 2.42381 15.6207 2.44445 17.2495 3.60679C17.6293 3.87815 18.0202 4.13638 18.4091 4.40211ZM14.9226 17.6537C15.8449 17.7162 16.6868 17.4880 17.4404 16.9616C19.6516 15.4172 21.8445 13.8484 24.0819 12.3397C25.4368 11.4256 25.4100 9.63110 24.2061 8.72323C23.5642 8.23929 22.8681 7.82099 22.2014 7.36581C20.9020 6.47983 19.5902 5.61010 18.3143 4.69348C17.1090 3.82688 15.8521 3.11909 14.2749 3.35544C13.6677 3.44673 12.9931 3.56302 12.5081 3.88628C10.1656 5.44566 7.89094 7.09820 5.56273 8.67884C4.17117 9.62360 4.27052 11.4043 5.46992 12.2884C6.32617 12.9199 7.23797 13.4814 8.12102 14.0798C9.37532 14.9289 10.6427 15.7617 11.8735 16.6414C12.7859 17.2936 13.7494 17.7338 14.9226 17.6537ZM11.2767 21.1833C11.4081 21.3152 12.1238 21.8035 12.4454 22.0105C12.9480 22.3331 13.4337 22.1887 13.5049 21.6228C13.5820 21.0088 13.6030 20.3623 13.4807 19.7608C13.4043 19.3832 13.0938 18.9624 12.7598 18.7335C10.2969 17.0460 7.80270 15.4003 5.31501 13.7459C4.79342 13.3989 4.30516 13.5496 4.23130 14.1392C4.15548 14.7394 4.15025 15.3672 4.25026 15.9618C4.30843 16.3082 4.58034 16.6671 4.85551 16.9222C5.21566 17.2554 5.66535 17.5049 6.09544 17.7606C6.20067 17.8232 6.30852 17.6825 6.37388 17.6200C5.97713 17.2304 5.74117 17.0891 5.32089 16.8471C4.77904 16.5351 4.55288 16.0556 4.49863 15.4978C4.46334 15.1315 4.48948 14.7544 4.53785 14.3880C4.60909 13.8509 4.76139 13.7953 5.21435 14.0979C7.55302 15.6567 9.89169 17.2167 12.2297 18.7767C13.1846 19.4138 13.5468 20.4967 13.1650 21.5628C13.0631 21.8473 12.9069 21.9217 12.6363 21.7241C12.3755 21.5334 11.9532 21.2114 11.6676 21.0595C11.5604 21.0007 11.5231 21.1833 11.2767 21.1833ZM17.7116 21.3771C17.7077 21.3258 17.3888 21.2070 17.2705 21.2664C17.0345 21.3852 16.8279 21.5553 16.6051 21.6979C16.2580 21.9204 16.0933 21.8729 16.0377 21.4709C15.9776 21.0357 15.9063 20.5737 15.9992 20.1554C16.0861 19.7627 16.2815 19.2825 16.5979 19.0643C19.0771 17.3542 21.5987 15.7004 24.1021 14.0216C24.4113 13.8140 24.6022 13.9072 24.6348 14.2136C24.6878 14.7063 24.7172 15.2090 24.6721 15.7004C24.6263 16.2044 24.3322 16.5939 23.8622 16.8665C23.4714 17.0935 23.1086 17.3649 22.7341 17.6168C22.7419 17.6637 23.0589 17.7894 23.1635 17.7306C23.4838 17.5499 23.7694 17.3136 24.0884 17.1310C24.7590 16.7490 25.0231 16.1494 25.0760 15.4516C25.1041 15.0846 25.0806 14.7082 25.0296 14.3424C24.9165 13.5271 24.4838 13.3526 23.7832 13.8197C21.4099 15.4022 19.0372 16.9853 16.6645 18.5691C15.6599 19.2394 15.2481 20.6887 15.7501 21.7791C15.9449 22.2031 16.2789 22.3100 16.6855 22.0586C17.0351 21.8429 17.3705 21.6053 17.7116 21.3771ZM10.2139 20.1041C9.47075 19.6076 8.73281 19.1043 7.97787 18.6247C7.89094 18.5697 7.75172 18.7304 7.61642 18.7454C8.34783 19.3363 9.04394 19.8409 9.77338 20.3085C9.88188 20.3779 10.2035 20.1597 10.2139 20.1041ZM19.0006 20.1028C19.0032 20.1504 19.3111 20.2960 19.4039 20.2366C20.1444 19.7646 20.8700 19.2719 21.6007 18.7854C21.5935 18.7448 21.2621 18.6097 21.1654 18.6716C20.4346 19.1356 19.7196 19.6226 19.0006 20.1028Z"/>
+        </svg>`,
+        'shadowrocket': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M21.9297 23.7404C19.7230 23.3556 17.5164 22.9708 15.2717 22.5791C14.4346 24.2077 12.9509 24.8880 11.0333 24.8811C9.12343 24.8743 7.61681 24.2352 6.73414 22.5379C4.55030 22.9227 2.34363 23.3075 0 23.7198C0.0608736 22.9021 0.0837012 22.1324 0.190230 21.3697C0.448943 19.5349 1.27074 17.9269 2.70127 16.5800C2.95237 16.3464 3.05890 16.0990 3.03607 15.7348C2.84584 12.6219 3.21869 9.57770 4.55791 6.68468C5.56993 4.49945 7.05373 2.60971 9.07016 1.08418C9.57998 0.699357 10.1278 0.355768 10.6985 0.067153C10.9040 -0.0359237 11.2997 -0.0153082 11.5051 0.0946402C12.8063 0.836792 13.9781 1.74387 14.9292 2.82274C16.0478 4.08714 16.9609 5.48899 17.6077 7.01452C18.7719 9.77698 19.1980 12.6288 19.0078 15.5630C18.9773 15.9959 19.0915 16.3258 19.4415 16.6625C21.2525 18.3736 21.9601 20.4832 21.9830 22.8059C21.9830 23.0739 21.9906 23.3487 21.9982 23.6167C22.0058 23.6305 21.9906 23.6442 21.9297 23.7404ZM20.1035 21.9263C20.1415 21.8232 20.1568 21.7957 20.1568 21.7682C20.1644 21.7064 20.1644 21.6377 20.1568 21.5758C20.0426 19.6723 19.3121 18.0162 17.7827 16.6694C17.6229 16.5319 17.4555 16.3052 17.4631 16.1265C17.5772 14.2986 17.6533 12.4707 17.0826 10.6841C16.7631 9.68077 16.5348 8.64313 16.0935 7.68796C15.1347 5.61268 13.7803 3.77791 11.6953 2.45853C11.0714 2.05997 11.0105 2.05997 10.4018 2.48602C7.82226 4.27268 6.21671 6.64345 5.33405 9.43339C4.67966 11.5224 4.51986 13.6527 4.69488 15.8104C4.72531 16.1815 4.60356 16.4357 4.30681 16.6831C3.43936 17.3909 2.84584 18.2705 2.45016 19.2600C2.12297 20.0778 1.94795 20.9230 1.93274 21.8576C3.89591 21.5071 5.77538 21.1704 7.66246 20.8337C7.78421 21.0604 7.88313 21.2666 7.99727 21.4590C8.62883 22.5035 9.59520 23.1014 10.9268 23.1426C12.3041 23.1838 13.3237 22.6203 14.0314 21.5621C14.4651 20.9093 14.4651 20.9093 15.3097 21.0604C15.3478 21.0673 15.3782 21.0742 15.4162 21.0811C16.9837 21.3628 18.5360 21.6445 20.1035 21.9263Z"/>
+            <path d="M10.9725 34C9.84633 32.4538 8.75060 30.9695 8.42341 29.1760C8.17991 27.8497 9.03975 26.5716 10.3638 26.1181C11.2616 25.8088 12.2813 26.1387 12.9509 26.9289C13.5748 27.6711 13.7727 28.5232 13.5824 29.4096C13.2096 31.1276 12.1671 32.5569 10.9725 34ZM10.8736 31.7598C10.9801 31.7598 11.0866 31.7598 11.1855 31.7529C11.5280 30.9970 11.9008 30.2549 12.2128 29.4852C12.4411 28.9217 12.2356 28.3857 11.8856 27.9047C11.5127 27.3825 10.8355 27.3344 10.3409 27.7673C9.89198 28.1590 9.64088 28.6675 9.81589 29.1966C10.1126 30.0625 10.5159 30.9008 10.8736 31.7598Z"/>
+            <path d="M10.9421 7.64677C12.8976 7.59867 14.4195 9.02113 14.4271 10.6429C14.4347 12.3814 12.9357 13.7627 11.0410 13.7695C9.14628 13.7764 7.70814 12.4433 7.64727 10.7116C7.59400 9.21354 9.22237 7.56431 10.9421 7.64677ZM12.8824 10.7528C12.8976 9.79077 12.0986 9.01425 11.0714 9.00051C10.0061 8.98677 9.06258 9.74266 9.07780 10.7253C9.09302 11.6736 9.89959 12.4227 10.9421 12.4364C12.0454 12.4433 12.8672 11.7355 12.8824 10.7528Z"/>
+        </svg>`,
+        'clash-meta': `<svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.1 35.17H5.686m9.282 2.993l-8.846 3.163M24 16.874c.801 0 2.551.256 2.551.256L37.746 6.674s3.295.341 4.754.852V31.63c-1.42.653-4.574 1.108-6.45 1.108V17.11l-7.756 7.302S25.708 23.560 24 23.560s-4.294.853-4.294.853L11.95 17.11v15.627c-1.876 0-5.03-.455-6.45-1.108V7.526c1.458-.511 4.754-.852 4.754-.852L21.45 17.13s1.75-.256 2.551-.256m.625 17.245L24 35.265l-.626-1.146M32.9 35.17h9.414m-9.282 2.993l8.846 3.163"/>
+        </svg>`,
+        'v2rayng': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M0 1.86298V3.72596H1.87780H3.75560L3.80567 17.3630L3.88078 31L18.4024 15.6987C26.3893 7.30288 32.9741 0.322916 32.9992 0.198717C33.0492 0.0993585 30.8460 -4.76837e-07 28.1169 -4.76837e-07H23.1595L16.2742 6.38381L9.38899 12.7428L9.26380 6.43349L9.13862 0.124198L4.58183 0.049679L0 -4.76837e-07V1.86298Z"/>
+        </svg>`,
+        'clash-verge-rev': `<svg class="w-6 h-6" viewBox="0 0 22 22" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.007 22C6.01025 22 0.413848 19.6085 0.0141045 14.2017C-0.0891418 12.8053 0.393020 11.8257 0.853709 10.8897C0.907577 10.7802 0.961152 10.6714 1.01346 10.5625C0.347223 7.78979 -0.385635 1.82844 2.01282 0.164802C3.51185 -0.874970 7.00960 3.28412 8.00897 4.84377C9.00832 4.32389 10.5074 4.32389 11.0070 4.32389C12.0064 4.32389 12.5061 4.32389 14.0051 4.84377C15.1710 3.11082 18.0026 -0.251107 20.0013 0.164802C22.0654 0.594314 21.4010 6.70141 21.1077 9.39799C21.0459 9.96537 21.0006 10.3818 21.0006 10.5625C21.0864 10.7409 21.1721 10.9040 21.2553 11.0623C21.6571 11.8266 22.0000 12.4790 22.0000 14.2017C22.0000 16.2813 19.0019 22.0000 11.0070 22.0000ZM8.86995 16.1663C8.39444 16.9904 6.84049 16.9834 5.39910 16.1507C3.95771 15.3180 3.17471 13.9749 3.65022 13.1507C4.12573 12.3266 5.67969 12.3336 7.12107 13.1663C8.56246 13.9990 9.34546 15.3421 8.86995 16.1663ZM18.0871 13.1507C18.5626 13.9749 17.7796 15.3180 16.3382 16.1507C14.8968 16.9834 13.3429 16.9904 12.8674 16.1663C12.3919 15.3421 13.1749 13.9990 14.6163 13.1663C16.0576 12.3336 17.6116 12.3266 18.0871 13.1507ZM11.0070 19.1585C10.0077 19.1585 8.14148 17.6696 9.50800 17.6585H12.5061C14.0051 17.6585 12.0064 19.1585 11.0070 19.1585Z"/>
+        </svg>`,
+        'hiddify': `<svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M26.8191 2.1691C25.0243 3.36662 23.3928 4.49636 23.2092 4.67711C22.6993 5.17420 22.6789 8.38265 23.1684 8.90233C23.6375 9.44461 30.2046 9.44461 30.6737 8.90233C30.9388 8.60860 31.0000 7.88557 31.0000 4.63192C31.0000 1.37828 30.9388 0.655248 30.6737 0.361516C30.5105 0.158163 30.3066 0 30.2250 0C30.1434 0 28.6138 0.971575 26.8191 2.1691Z" />
+            <path d="M15.3980 9.39942C13.6033 10.5969 11.9717 11.7267 11.7882 11.9074C11.4618 12.2464 11.4211 12.8338 11.4211 18.1888C11.4211 22.4818 11.3599 24.1538 11.1763 24.3571C10.8500 24.7187 8.72895 24.7187 8.40263 24.3571C8.23947 24.1764 8.15789 22.8885 8.15789 20.0867C8.15789 16.6749 8.11711 16.0197 7.83158 15.7034C7.64803 15.5000 7.36250 15.3870 7.17895 15.4774C6.70987 15.6808 1.40724 19.2055 0.673026 19.8156L0 20.3579V25.3061C0 29.4862 0.0407895 30.2996 0.326316 30.5933C0.591447 30.8870 1.22368 30.9548 4.07895 30.9548C8.21908 30.9548 8.15789 31.0000 8.15789 28.6050C8.15789 27.6334 8.25987 26.8652 8.40263 26.7070C8.72895 26.3455 10.8500 26.3455 11.1763 26.7070C11.3191 26.8652 11.4211 27.6334 11.4211 28.6050C11.4211 31.0000 11.3599 30.9548 15.5000 30.9548C18.3553 30.9548 18.9875 30.8870 19.2526 30.5933C19.5382 30.2770 19.5789 28.9213 19.5789 19.0926C19.5789 9.26385 19.5382 7.90817 19.2526 7.59184C19.0895 7.38849 18.8855 7.23032 18.8039 7.23032C18.7224 7.23032 17.1928 8.20190 15.3980 9.39942Z" />
+            <path d="M23.1684 11.4329C22.8829 11.7267 22.8421 12.9242 22.8421 21.0131C22.8421 29.1020 22.8829 30.2996 23.1684 30.5933C23.6375 31.1356 30.2046 31.1356 30.6737 30.5933C30.9592 30.2996 31.0000 29.1020 31.0000 21.0131C31.0000 12.9242 30.9592 11.7267 30.6737 11.4329C30.4086 11.1392 29.7763 11.0714 26.9211 11.0714C24.0658 11.0714 23.4336 11.1392 23.1684 11.4329Z" />
+        </svg>`,
+        // Системные иконки
+        'android': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6,18c0,0.55 0.45,1 1,1h1v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5V19h2v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5V19h1c0.55,0 1,-0.45 1,-1V8H6v10zM3.5,8C2.67,8 2,8.67 2,9.5v7c0,0.83 0.67,1.5 1.5,1.5S5,17.33 5,16.5v-7C5,8.67 4.33,8 3.5,8zM20.5,8C19.67,8 19,8.67 19,9.5v7c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5v-7C22,8.67 21.33,8 20.5,8zM15.53,2.16l1.3,-1.3c0.2,-0.2 0.2,-0.51 0,-0.71c-0.2,-0.2 -0.51,-0.2 -0.71,0l-1.48,1.48C13.85,1.23 12.95,1 12,1c-0.96,0 -1.86,0.23 -2.66,0.63L7.85,0.15c-0.2,-0.2 -0.51,-0.2 -0.71,0c-0.2,0.2 -0.2,0.51 0,0.71l1.31,1.31C6.97,3.26 6,5.01 6,7h12C18,5.01 17.03,3.25 15.53,2.16zM10,5H9V4h1V5zM15,5h-1V4h1V5z"/>
+        </svg>`,
+        'ios': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22.00 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.09,22.00C7.79,22.05 6.80,20.68 5.96,19.47C4.25,17.00 2.94,12.45 4.70,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.10,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.10 19.56,8.82C19.47,8.88 17.39,10.10 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2.00C16.07,3.17 15.60,4.35 14.90,5.19C14.21,6.04 13.07,6.70 11.95,6.61C11.80,5.46 12.36,4.26 13,3.5Z"/>
+        </svg>`,
+        'pc': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21,16H3V4H21M21,2H3C1.89,2 1,2.89 1,4V16A2,2 0 0,0 3,18H10V20H8V22H16V20H14V18H21A2,2 0 0,0 23,16V4C23,2.89 22.1,2 21,2Z"/>
+        </svg>`
+    };
+
+    // Функция получения иконки для приложения
+    function getAppIcon(app, platform) {
+        if (!app || !app.id) {
+            // Если нет ID приложения, используем системную иконку
+            return appIcons[platform] || appIcons['pc'];
+        }
+
+        // Специальные случаи для ID приложений
+        const appId = app.id.toLowerCase();
+        
+        if (appIcons[appId]) {
+            return appIcons[appId];
+        }
+        
+        // Для Clash-подобных приложений
+        if (appId.includes('clash')) {
+            return appIcons['clash-meta'];
+        }
+        
+        // Для V2Ray-подобных приложений  
+        if (appId.includes('v2ray')) {
+            return appIcons['v2rayng'];
+        }
+
+        // По умолчанию используем системную иконку
+        return appIcons[platform] || appIcons['pc'];
+    }
+
+    // Переводы
+    const translations = {
+        ru: {
+            page_title: 'Подписка',
+            loading_data: 'Загрузка данных подписки...',
+            error_title: 'Ошибка',
+            user_info_title: 'Информация о пользователе',
+            subscription_links_title: 'Ссылки подписки',
+            apps_title: 'Приложения',
+            choose_app_title: 'Выберите приложение',
+            username_label: 'Имя пользователя:',
+            status_label: 'Статус:',
+            expires_at_label: 'Срок действия:',
+            days_left_label: 'Дней осталось:',
+            traffic_label: 'Трафик:',
+            traffic_reset_strategy_label: 'Сброс трафика:',
+            subscription_link_label: 'Ссылка подписки',
+            server_label: 'Сервер',
+            copied_to_clipboard: 'Скопировано в буфер обмена!',
+            nav_status: 'Статус',
+            nav_apps: 'Приложения',
+            nav_links: 'Ссылки',
+            settings_title: 'Настройки',
+            theme_label: 'Цветовая схема:',
+            brightness_label: 'Яркость:',
+            language_label: 'Язык:',
+            light_mode: 'Светлая',
+            dark_mode: 'Тёмная',
+            auto_mode: 'Авто',
+            candy_theme: 'Candy',
+            mint_theme: 'Mint',
+            latte_theme: 'Latte',
+            nautical_theme: 'Nautical',
+            lavender_theme: 'Lavender',
+            evergreen_theme: 'Evergreen',
+            red_theme: 'Красная',
+            grey_theme: 'Серая',
+            add_subscription: 'Добавить подписку',
+            download_app: 'Скачать приложение',
+            unlimited: 'Без лимита',
+            permanent: 'Бессрочно',
+            // Статусы пользователя
+            status_active: 'Активен',
+            status_disabled: 'Отключен',
+            status_limited: 'Ограничен',
+            status_expired: 'Истёк',
+            // Стратегии сброса трафика
+            reset_no_reset: 'Без сброса',
+            reset_day: 'Ежедневно',
+            reset_week: 'Еженедельно',
+            reset_month: 'Ежемесячно',
+            // Шаги приложений
+            step_installation: 'Установка',
+            step_before_subscription: 'Подготовка',
+            step_add_subscription: 'Добавление подписки',
+            step_after_subscription: 'После добавления',
+            step_connect_use: 'Подключение и использование'
+        },
+        en: {
+            page_title: 'Subscription',
+            loading_data: 'Loading subscription data...',
+            error_title: 'Error',
+            user_info_title: 'User Information',
+            subscription_links_title: 'Subscription Links',
+            apps_title: 'Applications',
+            choose_app_title: 'Choose Application',
+            username_label: 'Username:',
+            status_label: 'Status:',
+            expires_at_label: 'Expires:',
+            days_left_label: 'Days left:',
+            traffic_label: 'Traffic:',
+            traffic_reset_strategy_label: 'Traffic reset:',
+            subscription_link_label: 'Subscription link',
+            server_label: 'Server',
+            copied_to_clipboard: 'Copied to clipboard!',
+            nav_status: 'Status',
+            nav_apps: 'Apps',
+            nav_links: 'Links',
+            settings_title: 'Settings',
+            theme_label: 'Color scheme:',
+            brightness_label: 'Brightness:',
+            language_label: 'Language:',
+            light_mode: 'Light',
+            dark_mode: 'Dark',
+            auto_mode: 'Auto',
+            candy_theme: 'Candy',
+            mint_theme: 'Mint',
+            latte_theme: 'Latte',
+            nautical_theme: 'Nautical',
+            lavender_theme: 'Lavender',
+            evergreen_theme: 'Evergreen',
+            red_theme: 'Red',
+            grey_theme: 'Grey',
+            add_subscription: 'Add subscription',
+            download_app: 'Download app',
+            unlimited: 'Unlimited',
+            permanent: 'Permanent',
+            // User statuses
+            status_active: 'Active',
+            status_disabled: 'Disabled',
+            status_limited: 'Limited',
+            status_expired: 'Expired',
+            // Traffic reset strategies
+            reset_no_reset: 'No reset',
+            reset_day: 'Daily',
+            reset_week: 'Weekly',
+            reset_month: 'Monthly',
+            // App steps
+            step_installation: 'Installation',
+            step_before_subscription: 'Before subscription',
+            step_add_subscription: 'Add subscription',
+            step_after_subscription: 'After subscription',
+            step_connect_use: 'Connect and use'
+        }
+    };
+
+    // Функция определения системной темы
+    function detectSystemTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    }
+
+    // Функция получения актуальной яркости
+    function getActualBrightness() {
+        if (currentBrightness === 'auto') {
+            return detectSystemTheme();
+        }
+        return currentBrightness;
+    }
+
+    // Определение языка системы
+    function detectSystemLanguage() {
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang.startsWith('ru')) return 'ru';
+        return 'en';
+    }
+
+    // Инициализация настроек
+    function initializeSettings() {
+        const savedLang = localStorage.getItem('lang');
+        currentLanguage = savedLang || detectSystemLanguage();
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            const [theme, brightness] = savedTheme.split('-');
+            currentTheme = theme;
+            currentBrightness = brightness;
+        } else {
+            // Случайный выбор палитры при первом запуске
+            currentTheme = getRandomPalette();
+            currentBrightness = 'auto';
+        }
+
+        // Слушатель изменения системной темы
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (currentBrightness === 'auto') {
+                    updateTheme();
+                }
+            });
+        }
+    }
+
+    // ИСПРАВЛЕНО: Навигация между секциями с правильной синхронизацией
+    function setPage(navbarItemId, sectionId) {
+        console.log('Switching to section:', sectionId);
+
+        const sections = ['status-section', 'apps-section', 'links-section'];
+        sections.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.add('hidden');
+            }
+        });
+
+        const selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.classList.remove('hidden');
+        }
+
+        setNavbarIndicator(navbarItemId);
+
+        const titles = {
+            'status-section': getTranslation('nav_status'),
+            'apps-section': getTranslation('choose_app_title'),
+            'links-section': getTranslation('nav_links')
+        };
+        
+        const titleElement = document.getElementById('title');
+        if (titleElement) {
+            titleElement.textContent = titles[sectionId] || getTranslation('page_title');
+        }
+
+        // QR кнопка убрана полностью
+        const qrButton = document.getElementById('qr-appbar-button');
+        if (qrButton) {
+            qrButton.classList.add('hidden');
+        }
+
+        // ИСПРАВЛЕНО: Обновляем currentSectionId ПОСЛЕ установки заголовка
+        currentSectionId = sectionId;
+
+        // ДОБАВЛЕНО: Если переходим в приложения, показываем их
+        if (sectionId === 'apps-section' && window.appsData) {
+            setTimeout(() => {
+                displayAppsSection();
+            }, 100);
+        }
+    }
+
+    window.setPage = setPage;
+
+    function getTranslation(key) {
+        return translations[currentLanguage] && translations[currentLanguage][key] 
+            ? translations[currentLanguage][key] 
+            : key;
+    }
+
+    function applyTranslations() {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const translation = getTranslation(key);
+            if (element.tagName === 'INPUT' && element.type === 'text') {
+                element.placeholder = translation;
+            } else {
+                element.textContent = translation;
+            }
+        });
+        
+        const pageTitle = document.getElementById('page-title');
+        if (pageTitle) {
+            pageTitle.textContent = getTranslation('page_title');
+        }
+
+        // Обновляем заголовок AppBar при смене языка
+        const titleElement = document.getElementById('title');
+        if (titleElement && currentSectionId) {
+            const titles = {
+                'status-section': getTranslation('nav_status'),
+                'apps-section': getTranslation('choose_app_title'),
+                'links-section': getTranslation('nav_links')
+            };
+            titleElement.textContent = titles[currentSectionId] || getTranslation('page_title');
+        }
+
+        // Обновляем переводы в отображенных данных
+        updateDisplayedDataTranslations();
+    }
+
+    // Функция для обновления переводов отображенных данных
+    function updateDisplayedDataTranslations() {
+        // Обновляем статус пользователя
+        const statusElement = document.getElementById('display-user-status');
+        if (statusElement && window.currentUserStatus) {
+            const statusText = getTranslation(`status_${window.currentUserStatus.toLowerCase()}`) || window.currentUserStatus;
+            statusElement.textContent = statusText;
+        }
+
+        // Обновляем срок действия
+        const expiresEl = document.getElementById('display-expires-at');
+        if (expiresEl && window.currentExpiresAt) {
+            const expiresDate = new Date(window.currentExpiresAt);
+            if (expiresDate.getFullYear() >= 2099) {
+                expiresEl.textContent = getTranslation('permanent');
+            } else {
+                expiresEl.textContent = formatDate(window.currentExpiresAt);
+            }
+        }
+
+        // Обновляем трафик
+        const trafficEl = document.getElementById('display-traffic');
+        if (trafficEl && window.currentTrafficData) {
+            if (window.currentTrafficData.limit === 0) {
+                trafficEl.textContent = getTranslation('unlimited');
+            } else {
+                trafficEl.textContent = `${formatBytes(window.currentTrafficData.used)} / ${formatBytes(window.currentTrafficData.limit)}`;
+            }
+        }
+
+        // Обновляем стратегию сброса трафика
+        const resetStrategyEl = document.getElementById('display-traffic-reset-strategy');
+        if (resetStrategyEl && window.currentTrafficResetStrategy) {
+            const strategyText = getTranslation(`reset_${window.currentTrafficResetStrategy.toLowerCase()}`) || window.currentTrafficResetStrategy;
+            resetStrategyEl.textContent = strategyText;
+        }
+
+        // Обновляем переводы в приложениях
+        if (currentSectionId === 'apps-section') {
+            setTimeout(() => {
+                displayAppsSection();
+            }, 100);
+        }
+    }
+
+    async function loadAppsConfig() {
+        // Если конфигурация уже загружена, возвращаем её
+        if (appsConfig !== null) {
+            return appsConfig;
+        }
+        
+        try {
+            const response = await fetch('/assets/app-config.json');
+            if (!response.ok) {
+                console.warn('App config not found, using empty config');
+                appsConfig = { ios: [], android: [], pc: [] };
+                return appsConfig;
+            }
+            const text = await response.text();
+            
+            if (text.trim().startsWith('<')) {
+                console.warn('Received HTML instead of JSON - config file not found');
+                appsConfig = { ios: [], android: [], pc: [] };
+                return appsConfig;
+            }
+            
+            appsConfig = JSON.parse(text);
+            console.log('Apps config loaded successfully:', appsConfig);
+            return appsConfig;
+        } catch (error) {
+            console.error('Failed to load apps config:', error);
+            appsConfig = { ios: [], android: [], pc: [] };
+            return appsConfig;
+        }
+    }
+
+    function decodeAndParseData(encodedData) {
+        try {
+            const decodedString = atob(encodedData);
+            console.log('Decoded string:', decodedString);
+            
+            const parsedData = JSON.parse(decodedString);
+            console.log('Parsed data:', parsedData);
+            
+            return parsedData;
+        } catch (error) {
+            console.error('Error decoding data:', error);
+            throw new Error('Failed to decode panel data: ' + error.message);
+        }
+    }
+
+    async function loadSubscriptionData() {
+        try {
+            // Предзагружаем конфигурацию приложений параллельно
+            const appsConfigPromise = loadAppsConfig();
+            
+            const encodedPanelData = '<%= panelData %>';
+            console.log('Encoded panel data:', encodedPanelData);
+            
+            const decodedData = decodeAndParseData(encodedPanelData);
+            
+            // Ждём загрузки конфигурации приложений
+            const loadedAppsConfig = await appsConfigPromise;
+            
+            const formattedData = formatApiData(decodedData, loadedAppsConfig);
+            
+            displayData(formattedData);
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+            displayError('Ошибка при загрузке данных подписки: ' + error.message);
+        }
+    }
+
+    function formatApiData(apiData, appsConfig) {
+        if (!apiData.response || !apiData.response.isFound) {
+            throw new Error('Подписка не найдена');
+        }
+
+        const response = apiData.response;
+        const user = response.user;
+        
+        const parseTraffic = (trafficStr) => {
+            if (!trafficStr) return 0;
+            const match = trafficStr.match(/^([\d.]+)\s*(\w+)$/);
+            if (!match) return 0;
+            
+            const value = parseFloat(match[1]);
+            const unit = match[2].toLowerCase();
+            
+            const units = {
+                'b': 1,
+                'kb': 1024,
+                'mb': 1024 * 1024,
+                'gb': 1024 * 1024 * 1024,
+                'gib': 1024 * 1024 * 1024,
+                'tb': 1024 * 1024 * 1024 * 1024,
+                'tib': 1024 * 1024 * 1024 * 1024
+            };
+            
+            return value * (units[unit] || 1);
+        };
+
+        // Парсим серверы БЕЗ нумерации
+        const servers = [];
+        if (response.links && Array.isArray(response.links)) {
+            response.links.forEach((link) => {
+                try {
+                    let serverName = getTranslation('server_label');
+                    let flag = '';
+                    
+                    const hashMatch = link.match(/#(.+)$/);
+                    if (hashMatch) {
+                        const hashPart = decodeURIComponent(hashMatch[1]);
+                        
+                        serverName = hashPart.replace(/[\u{1F1E6}-\u{1F1FF}][\u{1F1E6}-\u{1F1FF}]/gu, '').trim() || serverName;
+                        
+                        const flagMatches = hashPart.match(/[\u{1F1E6}-\u{1F1FF}][\u{1F1E6}-\u{1F1FF}]/gu);
+                        if (flagMatches && flagMatches.length > 0) {
+                            flag = flagMatches[0];
+                        }
+                    }
+                    
+                    servers.push({
+                        name: serverName,
+                        flag: flag,
+                        fullUrl: link
+                    });
+                } catch (error) {
+                    console.error('Error parsing server link:', error);
+                }
+            });
+        }
+
+        return {
+            username: user.username,
+            user_status: user.userStatus,
+            expires_at: user.expiresAt,
+            days_left: user.daysLeft,
+            traffic_used: parseTraffic(user.trafficUsed),
+            traffic_limit: parseTraffic(user.trafficLimit),
+            traffic_reset_strategy: user.trafficLimitStrategy,
+            subscription_url: response.subscriptionUrl,
+            cryptoLink: response.happ?.cryptoLink,
+            servers: servers,
+            apps: appsConfig
+        };
+    }
+
+    function setNavbarIndicator(navbarItemId) {
+        const navbarItems = document.querySelectorAll('.navbar-item');
+        navbarItems.forEach(item => {
+            item.classList.remove('navbar-item-active');
+        });
+
+        const selectedItem = document.getElementById(navbarItemId);
+        if (selectedItem) {
+            selectedItem.classList.add('navbar-item-active');
+        }
+    }
+
+    function displayData(data) {
+        console.log('Displaying data:', data);
+        
+        const loadingSpinner = document.getElementById('loading-spinner');
+        if (loadingSpinner) {
+            loadingSpinner.classList.add('hidden');
+        }
+
+        // Сохраняем данные в глобальных переменных для переводов
+        window.currentUserStatus = data.user_status;
+        window.currentExpiresAt = data.expires_at;
+        window.currentTrafficData = {
+            used: data.traffic_used,
+            limit: data.traffic_limit
+        };
+        window.currentTrafficResetStrategy = data.traffic_reset_strategy;
+
+        // Отображаем информацию о пользователе
+        if (data.username) {
+            const usernameEl = document.getElementById('display-username');
+            if (usernameEl) usernameEl.textContent = data.username;
+        }
+
+        if (data.user_status) {
+            const statusElement = document.getElementById('display-user-status');
+            if (statusElement) {
+                const statusText = getTranslation(`status_${data.user_status.toLowerCase()}`) || data.user_status;
+                statusElement.textContent = statusText;
+                statusElement.className = `badge badge-${data.user_status.toLowerCase()}`;
+            }
+        }
+
+        // Обработка бессрочной подписки
+        const isPermanent = data.expires_at && new Date(data.expires_at).getFullYear() >= 2099;
+        
+        if (data.expires_at) {
+            const expiresEl = document.getElementById('display-expires-at');
+            if (expiresEl) {
+                if (isPermanent) {
+                    expiresEl.textContent = getTranslation('permanent');
+                } else {
+                    expiresEl.textContent = formatDate(data.expires_at);
+                }
+            }
+        }
+
+        // Скрываем поле "Дней осталось" для бессрочной подписки
+        const daysLeftField = document.getElementById('days-left-field');
+        if (daysLeftField) {
+            if (isPermanent) {
+                daysLeftField.style.display = 'none';
+            } else {
+                daysLeftField.style.display = 'flex';
+                const daysLeftEl = document.getElementById('display-days-left');
+                if (daysLeftEl && data.days_left !== undefined) {
+                    daysLeftEl.textContent = data.days_left;
+                }
+            }
+        }
+
+        // Обработка трафика
+        const isUnlimited = data.traffic_limit === 0;
+        
+        const trafficEl = document.getElementById('display-traffic');
+        if (trafficEl) {
+            if (isUnlimited) {
+                trafficEl.textContent = getTranslation('unlimited');
+            } else {
+                trafficEl.textContent = `${formatBytes(data.traffic_used)} / ${formatBytes(data.traffic_limit)}`;
+            }
+        }
+
+        // Скрываем поле "Сброс трафика" для безлимитного трафика
+        const trafficResetField = document.getElementById('traffic-reset-field');
+        if (trafficResetField) {
+            if (isUnlimited) {
+                trafficResetField.style.display = 'none';
+            } else {
+                trafficResetField.style.display = 'flex';
+                if (data.traffic_reset_strategy) {
+                    const resetStrategyEl = document.getElementById('display-traffic-reset-strategy');
+                    if (resetStrategyEl) {
+                        const strategyText = getTranslation(`reset_${data.traffic_reset_strategy.toLowerCase()}`) || data.traffic_reset_strategy;
+                        resetStrategyEl.textContent = strategyText;
+                    }
+                }
+            }
+        }
+
+        // Сохраняем ссылку подписки для использования в links-section
+        if (data.subscription_url) {
+            window.subscriptionUrlForCopy = data.subscription_url;
+        }
+
+        // Отображаем серверы
+        if (data.servers && Array.isArray(data.servers)) {
+            displayServers(data.servers);
+        }
+
+        // Показываем только карточку пользователя в разделе статуса
+        const userInfoCard = document.getElementById('user-info-card');
+        if (userInfoCard) userInfoCard.classList.remove('hidden');
+
+        // Показываем карточку ссылок
+        const subscriptionLinksCard = document.getElementById('subscription-links-card');
+        if (subscriptionLinksCard) subscriptionLinksCard.classList.remove('hidden');
+
+        if (data.user_status === 'ACTIVE' && data.apps && (data.apps.ios?.length > 0 || data.apps.android?.length > 0 || data.apps.pc?.length > 0)) {
+            window.appsData = data;
+        }
+
+        // ДОБАВЛЕНО: После загрузки данных переходим в приложения
+        setTimeout(() => {
+            setPage('navbar-apps', 'apps-section');
+            applyTranslations();
+        }, 200);
+    }
+
+    // Функция отображения серверов БЕЗ нумерации
+    function displayServers(servers) {
+        const container = document.getElementById('fragment-links-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        servers.forEach((server) => {
+            const serverCard = document.createElement('div');
+            serverCard.className = 'server-card';
+
+            const serverHeader = document.createElement('div');
+            serverHeader.className = 'server-header';
+
+            const serverInfo = document.createElement('div');
+            serverInfo.className = 'server-info';
+
+            const serverName = document.createElement('span');
+            serverName.className = 'server-name';
+            serverName.textContent = `${server.flag} ${server.name}`;
+
+            serverInfo.appendChild(serverName);
+
+            const serverActions = document.createElement('div');
+            serverActions.className = 'server-actions';
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'btn btn-tonal btn-icon';
+            copyBtn.onclick = () => copyToClipboard(server.fullUrl);
+            copyBtn.innerHTML = '<span class="material-symbols-outlined">content_copy</span>';
+
+            const qrBtn = document.createElement('button');
+            qrBtn.className = 'btn btn-tonal btn-icon';
+            qrBtn.onclick = () => showQRCode(server.fullUrl, `QR-код: ${server.flag} ${server.name}`);
+            qrBtn.innerHTML = '<span class="material-symbols-outlined">qr_code_2</span>';
+
+            serverActions.appendChild(copyBtn);
+            serverActions.appendChild(qrBtn);
+
+            serverHeader.appendChild(serverInfo);
+            serverHeader.appendChild(serverActions);
+            serverCard.appendChild(serverHeader);
+
+            container.appendChild(serverCard);
+        });
+    }
+
+    function displayError(message) {
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        
+        if (loadingSpinner) loadingSpinner.classList.add('hidden');
+        if (errorText) errorText.textContent = message;
+        if (errorMessage) errorMessage.classList.remove('hidden');
+    }
+
+    function displayAppsSection() {
+        const data = window.appsData;
+        if (!data || !data.apps) {
+            console.log('No apps data available');
+            return;
+        }
+
+        console.log('Displaying apps:', data.apps);
+
+        const osAppDisplay = document.getElementById('os-app-display');
+        if (!osAppDisplay) return;
+        
+        osAppDisplay.innerHTML = '';
+        
+        const availablePlatforms = [];
+        
+        Object.keys(data.apps).forEach(platform => {
+            if (data.apps[platform] && Array.isArray(data.apps[platform]) && data.apps[platform].length > 0) {
+                availablePlatforms.push(platform);
+            }
+        });
+        
+        if (availablePlatforms.length === 0) {
+            console.log('No apps available for any platform');
+            return;
+        }
+
+        // ИСПРАВЛЕНО: Определяем предпочтительную платформу на основе User Agent
+        let preferredPlatform = availablePlatforms[0]; // По умолчанию первая доступная
+        
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        
+        // Определяем платформу пользователя
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            // iOS устройство
+            if (availablePlatforms.includes('ios')) {
+                preferredPlatform = 'ios';
+            }
+        } else if (/android/i.test(userAgent)) {
+            // Android устройство
+            if (availablePlatforms.includes('android')) {
+                preferredPlatform = 'android';
+            }
+        } else {
+            // Desktop/PC
+            if (availablePlatforms.includes('pc')) {
+                preferredPlatform = 'pc';
+            }
+        }
+
+        availablePlatforms.forEach(platform => {
+            const apps = data.apps[platform];
+            
+            const osContent = document.createElement('div');
+            osContent.className = 'os-content';
+            osContent.id = `${platform}-content`;
+
+            if (apps.length === 1) {
+                const app = apps[0];
+                if (app && app.name) {
+                    osContent.appendChild(createAppDetailsElement(app, data, platform));
+                }
+            } else {
+                const selectWrapper = document.createElement('div');
+                selectWrapper.className = 'app-select-wrapper';
+                
+                const select = document.createElement('div');
+                select.className = 'app-select';
+                
+                let currentAppIndex = 0;
+                
+                const featuredIndex = apps.findIndex(app => app && app.isFeatured);
+                if (featuredIndex !== -1) {
+                    currentAppIndex = featuredIndex;
+                }
+                
+                const updateSelectText = (index) => {
+                    const app = apps[index];
+                    if (app && app.name) {
+                        const icon = getAppIcon(app, platform);
+                        // ИСПРАВЛЕНО: звёздочка после названия
+                        select.innerHTML = `<div class="flex items-center gap-2">${icon}<span>${app.name}${app.isFeatured ? ' ⭐' : ''}</span></div>`;
+                    }
+                };
+                
+                updateSelectText(currentAppIndex);
+                
+                const trigger = document.createElement('div');
+                trigger.className = 'app-select-trigger';
+                
+                trigger.addEventListener('click', () => {
+                    createAppSelectModal(apps, currentAppIndex, platform, (selectedIndex) => {
+                        currentAppIndex = selectedIndex;
+                        updateSelectText(selectedIndex);
+                        
+                        const detailsContainer = osContent.querySelector('.app-details-container');
+                        detailsContainer.innerHTML = '';
+                        const selectedApp = apps[selectedIndex];
+                        if (selectedApp && selectedApp.name) {
+                            detailsContainer.appendChild(createAppDetailsElement(selectedApp, data, platform));
+                        }
+                    });
+                });
+                
+                selectWrapper.appendChild(select);
+                selectWrapper.appendChild(trigger);
+                osContent.appendChild(selectWrapper);
+
+                const detailsContainer = document.createElement('div');
+                detailsContainer.className = 'app-details-container';
+                
+                const selectedApp = apps[currentAppIndex];
+                if (selectedApp && selectedApp.name) {
+                    detailsContainer.appendChild(createAppDetailsElement(selectedApp, data, platform));
+                }
+                
+                osContent.appendChild(detailsContainer);
+            }
+
+            osAppDisplay.appendChild(osContent);
+        });
+
+        setupOSTabs(availablePlatforms, preferredPlatform);
+    }
+
+    // УБРАН app-header: createAppDetailsElement без заголовка
+    function createAppDetailsElement(app, data, platform) {
+        console.log('Creating app details for:', app);
+        
+        const detailsDiv = document.createElement('div');
+        detailsDiv.className = 'app-detail-section';
+        
+        const stepsContainer = document.createElement('div');
+        stepsContainer.className = 'app-steps-container';
+        
+        const stepOrder = [
+            'installationStep',
+            'additionalBeforeAddSubscriptionStep',
+            'addSubscriptionStep', 
+            'additionalAfterAddSubscriptionStep',
+            'connectAndUseStep'
+        ];
+        
+        stepOrder.forEach(stepKey => {
+            if (app[stepKey]) {
+                const stepElement = createStepElement(app[stepKey], stepKey, app, data);
+                if (stepElement) {
+                    stepsContainer.appendChild(stepElement);
+                }
+            }
+        });
+        
+        detailsDiv.appendChild(stepsContainer);
+        return detailsDiv;
+    }
+    
+    function createStepElement(step, stepKey, app, data) {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'app-step';
+        
+        const stepTitle = document.createElement('h5');
+        stepTitle.className = 'app-step-title';
+        
+        if (step.title && step.title[currentLanguage]) {
+            stepTitle.textContent = step.title[currentLanguage];
+        } else {
+            const stepTitles = {
+                'installationStep': getTranslation('step_installation'),
+                'additionalBeforeAddSubscriptionStep': getTranslation('step_before_subscription'),
+                'addSubscriptionStep': getTranslation('step_add_subscription'),
+                'additionalAfterAddSubscriptionStep': getTranslation('step_after_subscription'),
+                'connectAndUseStep': getTranslation('step_connect_use')
+            };
+            stepTitle.textContent = stepTitles[stepKey] || stepKey;
+        }
+        
+        stepDiv.appendChild(stepTitle);
+        
+        if (step.description && step.description[currentLanguage]) {
+            const stepDesc = document.createElement('p');
+            stepDesc.className = 'app-step-description';
+            stepDesc.textContent = step.description[currentLanguage];
+            stepDiv.appendChild(stepDesc);
+        }
+        
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'app-step-buttons';
+        
+        if (step.buttons && Array.isArray(step.buttons) && step.buttons.length > 0) {
+            step.buttons.forEach(buttonConfig => {
+                const button = document.createElement('a');
+                button.className = 'app-button';
+                button.href = buttonConfig.buttonLink;
+                button.target = '_blank';
+                button.rel = 'noopener noreferrer';
+                
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined';
+                
+                if (stepKey === 'installationStep') {
+                    icon.textContent = 'download';
+                } else {
+                    icon.textContent = 'open_in_new';
+                }
+                
+                button.appendChild(icon);
+                
+                const text = document.createElement('span');
+                text.textContent = buttonConfig.buttonText[currentLanguage] || buttonConfig.buttonText.en || 'Button';
+                button.appendChild(text);
+                
+                buttonsContainer.appendChild(button);
+            });
+        }
+        
+        // Добавляем кнопку "Добавить подписку" для addSubscriptionStep
+        if (stepKey === 'addSubscriptionStep') {
+            const subscriptionButton = document.createElement('a');
+            subscriptionButton.className = 'app-button';
+            
+            let url = '#';
+            
+            if (app.id === 'happ' && data.cryptoLink) {
+                url = data.cryptoLink;
+            } else if (app.urlScheme && data.subscription_url) {
+                let subscriptionUrl = data.subscription_url;
+                
+                if (app.isNeedBase64Encoding) {
+                    subscriptionUrl = btoa(subscriptionUrl);
+                } else {
+                    subscriptionUrl = encodeURIComponent(subscriptionUrl);
+                }
+                
+                url = app.urlScheme + subscriptionUrl;
+            }
+            
+            subscriptionButton.href = url;
+            if (url !== '#') {
+                subscriptionButton.target = '_blank';
+                subscriptionButton.rel = 'noopener noreferrer';
+            }
+            
+            const icon = document.createElement('span');
+            icon.className = 'material-symbols-outlined';
+            icon.textContent = 'add_link';
+            subscriptionButton.appendChild(icon);
+            
+            const text = document.createElement('span');
+            text.textContent = getTranslation('add_subscription');
+            subscriptionButton.appendChild(text);
+            
+            buttonsContainer.appendChild(subscriptionButton);
+        }
+        
+        if (buttonsContainer.children.length > 0) {
+            stepDiv.appendChild(buttonsContainer);
+        }
+        
+        return stepDiv;
+    }
+
+    // ИСПРАВЛЕНО: setupOSTabs с автоматическим выбором предпочтительной платформы
+    function setupOSTabs(platformKeys, preferredPlatform) {
+        const osTabsContainer = document.getElementById('os-tabs');
+        if (!osTabsContainer) return;
+        
+        osTabsContainer.innerHTML = '';
+        
+        const platformNames = {
+            'ios': 'iOS',
+            'android': 'Android', 
+            'pc': 'PC'
+        };
+        
+        platformKeys.forEach((platform) => {
+            const tab = document.createElement('button');
+            const isActive = platform === preferredPlatform;
+            tab.className = `os-tab${isActive ? ' active' : ''}`;
+            tab.textContent = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+            tab.onclick = () => switchOSTab(platform, tab);
+            osTabsContainer.appendChild(tab);
+        });
+        
+        // ИСПРАВЛЕНО: Активируем предпочтительную платформу
+        const preferredContent = document.getElementById(`${preferredPlatform}-content`);
+        if (preferredContent) {
+            // Сначала убираем active у всех
+            document.querySelectorAll('.os-content').forEach(content => content.classList.remove('active'));
+            // Затем добавляем только предпочтительной
+            preferredContent.classList.add('active');
+        }
+    }
+
+    function switchOSTab(platformName, clickedTab) {
+        document.querySelectorAll('.os-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.os-content').forEach(content => content.classList.remove('active'));
+        
+        clickedTab.classList.add('active');
+        const targetContent = document.getElementById(`${platformName}-content`);
+        if (targetContent) targetContent.classList.add('active');
+    }
+
+    // ИЗМЕНЕНО: Функция создания модального окна выбора приложения
+    function createAppSelectModal(apps, currentIndex, platform, onSelect) {
+        const modal = document.createElement('div');
+        modal.className = 'app-select-modal active';
+        
+        const content = document.createElement('div');
+        content.className = 'app-select-content';
+        
+        // --- Начало изменений ---
+        const header = document.createElement('div');
+        header.className = 'app-select-header';
+
+        const title = document.createElement('div');
+        title.className = 'app-select-title';
+        title.textContent = getTranslation('choose_app_title'); // Используем перевод
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'app-select-close material-symbols-outlined';
+        closeBtn.textContent = 'close';
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
+        content.appendChild(header);
+        // --- Конец изменений ---
+        
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'app-select-options';
+        
+        apps.forEach((app, index) => {
+            const option = document.createElement('button');
+            option.className = `app-select-option${index === currentIndex ? ' selected' : ''}`;
+            
+            const optionContent = document.createElement('div');
+            optionContent.className = 'flex items-center gap-3';
+            
+            const optionIcon = document.createElement('div');
+            optionIcon.className = 'w-6 h-6 flex-shrink-0';
+            optionIcon.innerHTML = getAppIcon(app, platform);
+            
+            const optionText = document.createElement('span');
+            optionText.textContent = `${app.name}${app.isFeatured ? ' ⭐' : ''}`;
+            
+            optionContent.appendChild(optionIcon);
+            optionContent.appendChild(optionText);
+            option.appendChild(optionContent);
+            
+            option.addEventListener('click', () => {
+                onSelect(index);
+                closeModal();
+            });
+            optionsContainer.appendChild(option);
+        });
+        
+        const closeModal = () => {
+            document.body.removeChild(modal);
+        };
+        
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        content.appendChild(optionsContainer);
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const notification = document.getElementById('copy-notification');
+            if (notification) {
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 3000);
+            }
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    // Исправленный QR код
+    function showQRCode(text, title) {
+        const modal = document.getElementById('qr-modal');
+        const container = document.getElementById('qr-code-container');
+        const titleElement = document.getElementById('qr-modal-title');
+        
+        if (container) container.innerHTML = '';
+        if (titleElement) titleElement.textContent = title;
+        
+        if (container && typeof QRCode !== 'undefined') {
+            try {
+                new QRCode(container, {
+                    text: text,
+                    width: 256,
+                    height: 256,
+                    colorDark: '#000000',
+                    colorLight: '#FFFFFF'
+                });
+            } catch (error) {
+                console.error('QRCode generation failed:', error);
+                container.innerHTML = '<p>Ошибка генерации QR-кода</p>';
+            }
+        }
+        
+        if (modal) modal.classList.add('active');
+    }
+
+    function closeQRModal() {
+        const modal = document.getElementById('qr-modal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    window.copyToClipboard = copyToClipboard;
+    window.showQRCode = showQRCode;
+    window.closeQRModal = closeQRModal;
+
+    function formatDate(dateString) {
+        try {
+            return new Date(dateString).toLocaleString(currentLanguage);
+        } catch {
+            return dateString;
+        }
+    }
+
+    function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function openSettingsModal() {
+        const modal = document.getElementById('settings-modal');
+        if (modal) {
+            modal.classList.add('active');
+            updateSettingsUI();
+        }
+    }
+
+    function closeSettingsModal() {
+        const modal = document.getElementById('settings-modal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    function selectPalette(palette) {
+        currentTheme = palette;
+        updateTheme();
+        updateSettingsUI();
+        saveSettings();
+    }
+
+    function selectBrightness(brightness) {
+        currentBrightness = brightness;
+        updateTheme();
+        updateSettingsUI();
+        saveSettings();
+    }
+
+    function selectLanguage(language) {
+        currentLanguage = language;
+        applyTranslations();
+        updateSettingsUI();
+        saveSettings();
+    }
+
+    function saveSettings() {
+        localStorage.setItem('theme', `${currentTheme}-${currentBrightness}`);
+        localStorage.setItem('lang', currentLanguage);
+    }
+
+    window.openSettingsModal = openSettingsModal;
+    window.closeSettingsModal = closeSettingsModal;
+    window.selectPalette = selectPalette;
+    window.selectBrightness = selectBrightness;
+    window.selectLanguage = selectLanguage;
+
+    // Функция updateTheme с поддержкой автоматической темы и theme-color
+    function updateTheme() {
+        const actualBrightness = getActualBrightness();
+        document.body.setAttribute('data-theme', `${currentTheme}-${actualBrightness}`);
+        
+        // Обновляем meta theme-color
+        const themeColorMeta = document.getElementById('theme-color-meta');
+        if (themeColorMeta) {
+            // Мапинг цветов primary-container для каждой темы
+            const themeColors = {
+                'candy-light': '#EADDFF',
+                'candy-dark': '#4F378B',
+                'mint-light': '#70F7E5',
+                'mint-dark': '#005049',
+                'latte-light': '#FFDBB8',
+                'latte-dark': '#6B4000',
+                'nautical-light': '#BFF2FF',
+                'nautical-dark': '#004D62',
+                'lavender-light': '#EDDCFF',
+                'lavender-dark': '#544374',
+                'evergreen-light': '#6AFCA1',
+                'evergreen-dark': '#00522F',
+                'red-light': '#FFCDD2',
+                'red-dark': '#B71C1C',
+                'grey-light': '#E0E0E0',
+                'grey-dark': '#424242'
+            };
+            
+            const currentThemeKey = `${currentTheme}-${actualBrightness}`;
+            const themeColor = themeColors[currentThemeKey] || '#EADDFF';
+            themeColorMeta.setAttribute('content', themeColor);
+        }
+    }
+
+    function updateSettingsUI() {
+        document.querySelectorAll('[data-palette]').forEach(btn => {
+            btn.classList.toggle('selected', btn.getAttribute('data-palette') === currentTheme);
+        });
+        
+        document.querySelectorAll('[data-brightness]').forEach(btn => {
+            btn.classList.toggle('selected', btn.getAttribute('data-brightness') === currentBrightness);
+        });
+        
+        document.querySelectorAll('[data-language]').forEach(btn => {
+            btn.classList.toggle('selected', btn.getAttribute('data-language') === currentLanguage);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing...');
+        
+        initializeSettings();
+        
+        // Применяем переводы сразу
+        applyTranslations();
+        
+        updateTheme();
+        
+        // Предзагружаем конфигурацию приложений сразу
+        loadAppsConfig().then(() => {
+            console.log('Apps config preloaded');
+        });
+        
+        loadSubscriptionData();
+        
+        const settingsButton = document.getElementById('settings-button');
+        if (settingsButton) {
+            settingsButton.addEventListener('click', openSettingsModal);
+        }
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Применяем переводы через секунду после полной загрузки
+        setTimeout(() => {
+            applyTranslations();
+        }, 1000);
+    });
+</script>
+    <script type="module" defer>
+        // Fix flags emoji in some browsers on Windows
+        import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
+        polyfillCountryFlagEmojis();
+    </script>
+</body>
+</html>
