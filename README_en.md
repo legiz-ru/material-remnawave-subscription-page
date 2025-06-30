@@ -11,6 +11,9 @@ This repository contains the source code for the subscription page of the Remnaw
 * **Dark and Light Theme Support:** Automatic or manual switching between light and dark themes for comfortable use in any lighting conditions.
 
 * **Flexible App Configuration:** Supports a standard list of recommended applications for connection, as well as easy integration of third-party clients via a [customizable `app-config.json`](https://remna.st/docs/install/remnawave-subscription-page#custom-app-configjson-custom-apps) file.
+* * **Custom Groups**  
+The ability to add additional groups to the apps section via the integration file, [for example, the `TV section`](https://github.com/legiz-ru/my-remnawave/blob/main/sub-page/multiapp/app-config.json).
+
 
 * **Individual Link Copying:** Ability to copy individual links (e.g., `vless://`, `trojan://` ) directly from the page, in addition to the main subscription link.
 
@@ -76,5 +79,6 @@ This repository contains the source code for the subscription page of the Remnaw
 If you like this project and want to support its development, you can make a donation:
 
   * [Tribute on Telegram](https://t.me/tribute/app?startapp=drzu)
+  * [TON USDT: `UQAGQTQZYCx5TWj5cmTLpo7164PFsXqZZJ6t6x88n7sHW9gU`]
 
 <!-- end list -->
