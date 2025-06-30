@@ -1632,10 +1632,6 @@
 
         // Специальные случаи для ID приложений
         const appId = app.id.toLowerCase();
-
-        if (appId === 'clash-verge') {
-            return appIcons['clash-verge-rev'];
-        }
         
         if (appIcons[appId]) {
             return appIcons[appId];
@@ -1643,6 +1639,10 @@
         
         
         // Для Clash-подобных приложений
+        if (appId.includes('clash-verge')) {
+            return appIcons['clash-verge-rev'];
+        }
+
         if (appId.includes('clash')) {
             return appIcons['clash-meta'];
         }
