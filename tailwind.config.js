@@ -1,5 +1,10 @@
 module.exports = {
-  content: ["./index.html"],
-  theme: { extend: {} },
+  content: [
+    "./index.html",
+    "./temp-classes.html"
+  ],
+  theme: {
+    extend: {}
+  },
   plugins: []
 }
