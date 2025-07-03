@@ -1,4 +1,4 @@
-name: Build Complete Tailwind CSS
+name: Build Complete Tailwind CSS (All Classes)
 
 on:
   push:
@@ -27,153 +27,235 @@ jobs:
         curl -sLo tailwindcss "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64"
         chmod +x tailwindcss
         
-    - name: Create Tailwind input
+    - name: Create Tailwind input with all layers
       run: |
         cat > src/input.css << 'EOF'
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
+        
+        /* Принудительно включаем все возможные классы */
+        @layer utilities {
+          /* Дополнительные утилиты */
+          .animate-none { animation: none; }
+          .animate-spin { animation: spin 1s linear infinite; }
+          .animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+          .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+          .animate-bounce { animation: bounce 1s infinite; }
+        }
         EOF
         
-    - name: Create Tailwind config
+    - name: Create comprehensive Tailwind config for ALL classes
       run: |
         cat > tailwind.config.js << 'EOF'
         module.exports = {
           content: [
             "./index.html",
-            "./temp-classes.html"
+            "./complete-classes.html"
           ],
           theme: {
-            extend: {}
+            extend: {
+              // Расширяем все возможные значения
+              spacing: {
+                '0.5': '0.125rem',
+                '1.5': '0.375rem',
+                '2.5': '0.625rem',
+                '3.5': '0.875rem',
+                '13': '3.25rem',
+                '15': '3.75rem',
+                '17': '4.25rem',
+                '18': '4.5rem',
+                '19': '4.75rem',
+                '21': '5.25rem',
+                '22': '5.5rem',
+                '23': '5.75rem',
+                '25': '6.25rem',
+                '26': '6.5rem',
+                '27': '6.75rem',
+                '28': '7rem',
+                '29': '7.25rem',
+                '31': '7.75rem',
+                '33': '8.25rem',
+                '35': '8.75rem',
+                '37': '9.25rem',
+                '39': '9.75rem',
+                '68': '17rem',
+                '72': '18rem',
+                '76': '19rem',
+                '80': '20rem',
+                '84': '21rem',
+                '88': '22rem',
+                '92': '23rem',
+                '96': '24rem',
+                '100': '25rem',
+                '104': '26rem',
+                '108': '27rem',
+                '112': '28rem',
+                '116': '29rem',
+                '120': '30rem',
+                '124': '31rem',
+                '128': '32rem'
+              },
+              colors: {
+                'gray-25': '#fcfcfc',
+                'gray-75': '#f7f7f7',
+                'gray-150': '#eeeeee',
+                'gray-250': '#e4e4e4',
+                'gray-350': '#c7c7c7',
+                'gray-450': '#9d9d9d',
+                'gray-550': '#737373',
+                'gray-650': '#525252',
+                'gray-750': '#404040',
+                'gray-850': '#262626',
+                'gray-950': '#0a0a0a'
+              }
+            }
           },
-          plugins: []
+          plugins: [],
+          // Включаем ВСЕ возможные классы через safelist
+          safelist: [
+            // Все варианты с важными префиксами
+            {pattern: /^(sm|md|lg|xl|2xl):/, variants: ['hover', 'focus', 'active', 'disabled']},
+            {pattern: /^(hover|focus|active|disabled):/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(group-hover|group-focus):/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(first|last|odd|even):/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все утилиты spacing (margin, padding)
+            {pattern: /^[mp][trblxy]?-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все размеры
+            {pattern: /^[wh]-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(min|max)-[wh]-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все цвета
+            {pattern: /^(text|bg|border|ring|shadow)-/, variants: ['hover', 'focus', 'active', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все flexbox и grid
+            {pattern: /^(flex|grid|col|row)-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(items|justify|content|self|place)-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^gap-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все typography
+            {pattern: /^(text|font|leading|tracking|decoration)-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все borders и rounds
+            {pattern: /^(border|rounded)-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все position и z-index
+            {pattern: /^(top|right|bottom|left|inset)-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^z-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все transform и animation
+            {pattern: /^(transform|rotate|scale|translate|skew)-/, variants: ['hover', 'focus', 'active', 'sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^animate-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все transition
+            {pattern: /^(transition|duration|ease)-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Все остальные утилиты
+            {pattern: /^(opacity|shadow|blur|brightness|contrast|grayscale|hue|invert|saturate|sepia)-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(cursor|select|pointer|resize)-/, variants: ['hover', 'focus', 'sm', 'md', 'lg', 'xl', '2xl']},
+            {pattern: /^(overflow|whitespace|break|content)-/, variants: ['sm', 'md', 'lg', 'xl', '2xl']},
+            
+            // Важные классы отдельно
+            'container', 'block', 'inline-block', 'inline', 'flex', 'inline-flex', 'table', 'inline-table',
+            'table-caption', 'table-cell', 'table-column', 'table-column-group', 'table-footer-group',
+            'table-header-group', 'table-row-group', 'table-row', 'flow-root', 'grid', 'inline-grid',
+            'contents', 'list-item', 'hidden', 'static', 'fixed', 'absolute', 'relative', 'sticky'
+          ]
         }
         EOF
         
-    - name: Generate comprehensive HTML for scanning
+    - name: Generate HTML with MAXIMUM class coverage
       run: |
-        cat > temp-classes.html << 'EOF'
+        cat > complete-classes.html << 'EOF'
         <!DOCTYPE html>
         <html>
-        <body>
-        <!-- Layout Classes -->
-        <div class="container mx-auto max-w-sm max-w-md max-w-lg max-w-xl max-w-2xl max-w-4xl max-w-6xl">
-          <div class="p-1 p-2 p-3 p-4 p-5 p-6 p-8 px-2 px-3 px-4 px-6 py-2 py-3 py-4 py-6">
-            <div class="m-1 m-2 m-3 m-4 m-6 mx-2 mx-4 mx-auto my-2 my-4 my-6">
-              <div class="mt-2 mt-4 mt-6 mt-8 mb-2 mb-4 mb-6 ml-2 ml-4 mr-2 mr-4">
+        <head><title>Complete Tailwind Classes</title></head>
+        <body class="antialiased">
         
-        <!-- Flexbox -->
-        <div class="flex flex-col flex-row items-start items-center items-end justify-start justify-center justify-between justify-around">
-          <div class="flex-1 flex-auto flex-none flex-grow flex-shrink">
+        <!-- LAYOUT CLASSES -->
+        <div class="container max-w-none max-w-xs max-w-sm max-w-md max-w-lg max-w-xl max-w-2xl max-w-3xl max-w-4xl max-w-5xl max-w-6xl max-w-7xl max-w-full max-w-min max-w-max max-w-fit max-w-prose max-w-screen-sm max-w-screen-md max-w-screen-lg max-w-screen-xl max-w-screen-2xl">
         
-        <!-- Grid -->
-        <div class="grid grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-6 grid-cols-12">
-          <div class="gap-1 gap-2 gap-3 gap-4 gap-6 gap-8">
+        <!-- SPACING CLASSES - все возможные padding и margin -->
+        <div class="p-0 p-px p-0.5 p-1 p-1.5 p-2 p-2.5 p-3 p-3.5 p-4 p-5 p-6 p-7 p-8 p-9 p-10 p-11 p-12 p-14 p-16 p-20 p-24 p-28 p-32 p-36 p-40 p-44 p-48 p-52 p-56 p-60 p-64 p-72 p-80 p-96">
+        <div class="px-0 px-px px-0.5 px-1 px-1.5 px-2 px-2.5 px-3 px-3.5 px-4 px-5 px-6 px-7 px-8 px-9 px-10 px-11 px-12 px-14 px-16 px-20 px-24 px-28 px-32 px-36 px-40 px-44 px-48 px-52 px-56 px-60 px-64 px-72 px-80 px-96">
+        <div class="py-0 py-px py-0.5 py-1 py-1.5 py-2 py-2.5 py-3 py-3.5 py-4 py-5 py-6 py-7 py-8 py-9 py-10 py-11 py-12 py-14 py-16 py-20 py-24 py-28 py-32 py-36 py-40 py-44 py-48 py-52 py-56 py-60 py-64 py-72 py-80 py-96">
+        <div class="pt-0 pt-px pt-0.5 pt-1 pt-1.5 pt-2 pt-2.5 pt-3 pt-3.5 pt-4 pt-5 pt-6 pt-7 pt-8 pt-9 pt-10 pt-11 pt-12 pt-14 pt-16 pt-20 pt-24 pt-28 pt-32 pt-36 pt-40 pt-44 pt-48 pt-52 pt-56 pt-60 pt-64 pt-72 pt-80 pt-96">
+        <div class="pr-0 pr-px pr-0.5 pr-1 pr-1.5 pr-2 pr-2.5 pr-3 pr-3.5 pr-4 pr-5 pr-6 pr-7 pr-8 pr-9 pr-10 pr-11 pr-12 pr-14 pr-16 pr-20 pr-24 pr-28 pr-32 pr-36 pr-40 pr-44 pr-48 pr-52 pr-56 pr-60 pr-64 pr-72 pr-80 pr-96">
+        <div class="pb-0 pb-px pb-0.5 pb-1 pb-1.5 pb-2 pb-2.5 pb-3 pb-3.5 pb-4 pb-5 pb-6 pb-7 pb-8 pb-9 pb-10 pb-11 pb-12 pb-14 pb-16 pb-20 pb-24 pb-28 pb-32 pb-36 pb-40 pb-44 pb-48 pb-52 pb-56 pb-60 pb-64 pb-72 pb-80 pb-96">
+        <div class="pl-0 pl-px pl-0.5 pl-1 pl-1.5 pl-2 pl-2.5 pl-3 pl-3.5 pl-4 pl-5 pl-6 pl-7 pl-8 pl-9 pl-10 pl-11 pl-12 pl-14 pl-16 pl-20 pl-24 pl-28 pl-32 pl-36 pl-40 pl-44 pl-48 pl-52 pl-56 pl-60 pl-64 pl-72 pl-80 pl-96">
         
-        <!-- Sizing -->
-        <div class="w-full w-auto w-1/2 w-1/3 w-1/4 w-2/3 w-3/4 h-full h-auto h-screen min-h-screen">
-          <div class="min-w-0 min-w-full max-w-none max-w-xs">
+        <div class="m-0 m-px m-0.5 m-1 m-1.5 m-2 m-2.5 m-3 m-3.5 m-4 m-5 m-6 m-7 m-8 m-9 m-10 m-11 m-12 m-14 m-16 m-20 m-24 m-28 m-32 m-36 m-40 m-44 m-48 m-52 m-56 m-60 m-64 m-72 m-80 m-96 m-auto">
+        <div class="mx-0 mx-px mx-0.5 mx-1 mx-1.5 mx-2 mx-2.5 mx-3 mx-3.5 mx-4 mx-5 mx-6 mx-7 mx-8 mx-9 mx-10 mx-11 mx-12 mx-14 mx-16 mx-20 mx-24 mx-28 mx-32 mx-36 mx-40 mx-44 mx-48 mx-52 mx-56 mx-60 mx-64 mx-72 mx-80 mx-96 mx-auto">
+        <div class="my-0 my-px my-0.5 my-1 my-1.5 my-2 my-2.5 my-3 my-3.5 my-4 my-5 my-6 my-7 my-8 my-9 my-10 my-11 my-12 my-14 my-16 my-20 my-24 my-28 my-32 my-36 my-40 my-44 my-48 my-52 my-56 my-60 my-64 my-72 my-80 my-96 my-auto">
         
-        <!-- Typography -->
-        <h1 class="text-xs text-sm text-base text-lg text-xl text-2xl text-3xl text-4xl">
-        <p class="font-thin font-light font-normal font-medium font-semibold font-bold font-extrabold">
-        <span class="text-left text-center text-right text-justify">
-        <div class="leading-3 leading-4 leading-5 leading-6 leading-7 leading-8">
+        <!-- WIDTH/HEIGHT CLASSES -->
+        <div class="w-0 w-px w-0.5 w-1 w-1.5 w-2 w-2.5 w-3 w-3.5 w-4 w-5 w-6 w-7 w-8 w-9 w-10 w-11 w-12 w-14 w-16 w-20 w-24 w-28 w-32 w-36 w-40 w-44 w-48 w-52 w-56 w-60 w-64 w-72 w-80 w-96 w-auto w-1/2 w-1/3 w-2/3 w-1/4 w-2/4 w-3/4 w-1/5 w-2/5 w-3/5 w-4/5 w-1/6 w-2/6 w-3/6 w-4/6 w-5/6 w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12 w-full w-screen w-min w-max w-fit">
+        <div class="h-0 h-px h-0.5 h-1 h-1.5 h-2 h-2.5 h-3 h-3.5 h-4 h-5 h-6 h-7 h-8 h-9 h-10 h-11 h-12 h-14 h-16 h-20 h-24 h-28 h-32 h-36 h-40 h-44 h-48 h-52 h-56 h-60 h-64 h-72 h-80 h-96 h-auto h-1/2 h-1/3 h-2/3 h-1/4 h-2/4 h-3/4 h-1/5 h-2/5 h-3/5 h-4/5 h-1/6 h-2/6 h-3/6 h-4/6 h-5/6 h-full h-screen h-min h-max h-fit">
         
-        <!-- Colors -->
-        <div class="text-white text-black text-gray-50 text-gray-100 text-gray-200 text-gray-300 text-gray-400 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900">
-        <div class="bg-white bg-black bg-gray-50 bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900">
-        <div class="bg-transparent bg-current">
+        <!-- FLEX/GRID CLASSES -->
+        <div class="flex inline-flex flex-row flex-row-reverse flex-col flex-col-reverse flex-wrap flex-wrap-reverse flex-nowrap flex-1 flex-auto flex-initial flex-none">
+        <div class="grid inline-grid grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5 grid-cols-6 grid-cols-7 grid-cols-8 grid-cols-9 grid-cols-10 grid-cols-11 grid-cols-12 grid-cols-none">
+        <div class="col-auto col-span-1 col-span-2 col-span-3 col-span-4 col-span-5 col-span-6 col-span-7 col-span-8 col-span-9 col-span-10 col-span-11 col-span-12 col-span-full col-start-1 col-start-2 col-start-3 col-start-4 col-start-5 col-start-6 col-start-7 col-start-8 col-start-9 col-start-10 col-start-11 col-start-12 col-start-13 col-start-auto col-end-1 col-end-2 col-end-3 col-end-4 col-end-5 col-end-6 col-end-7 col-end-8 col-end-9 col-end-10 col-end-11 col-end-12 col-end-13 col-end-auto">
+        <div class="grid-rows-1 grid-rows-2 grid-rows-3 grid-rows-4 grid-rows-5 grid-rows-6 grid-rows-none row-auto row-span-1 row-span-2 row-span-3 row-span-4 row-span-5 row-span-6 row-span-full row-start-1 row-start-2 row-start-3 row-start-4 row-start-5 row-start-6 row-start-7 row-start-auto row-end-1 row-end-2 row-end-3 row-end-4 row-end-5 row-end-6 row-end-7 row-end-auto">
         
-        <!-- Borders -->
-        <div class="border border-0 border-2 border-4 border-8">
-        <div class="border-solid border-dashed border-dotted border-double border-none">
-        <div class="border-gray-100 border-gray-200 border-gray-300 border-gray-400 border-gray-500">
-        <div class="border-t border-r border-b border-l">
-        <div class="rounded rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-3xl rounded-full">
-        <div class="rounded-t rounded-r rounded-b rounded-l">
+        <!-- TYPOGRAPHY CLASSES -->
+        <div class="text-xs text-sm text-base text-lg text-xl text-2xl text-3xl text-4xl text-5xl text-6xl text-7xl text-8xl text-9xl">
+        <div class="font-thin font-extralight font-light font-normal font-medium font-semibold font-bold font-extrabold font-black">
+        <div class="italic not-italic">
+        <div class="text-left text-center text-right text-justify">
+        <div class="align-baseline align-top align-middle align-bottom align-text-top align-text-bottom align-sub align-super">
+        <div class="whitespace-normal whitespace-nowrap whitespace-pre whitespace-pre-line whitespace-pre-wrap">
+        <div class="break-normal break-words break-all">
+        <div class="leading-3 leading-4 leading-5 leading-6 leading-7 leading-8 leading-9 leading-10 leading-none leading-tight leading-snug leading-normal leading-relaxed leading-loose">
+        <div class="tracking-tighter tracking-tight tracking-normal tracking-wide tracking-wider tracking-widest">
+        <div class="uppercase lowercase capitalize normal-case">
+        <div class="underline overline line-through no-underline">
+        <div class="decoration-solid decoration-double decoration-dotted decoration-dashed decoration-wavy">
         
-        <!-- Display -->
-        <div class="block inline inline-block flex inline-flex table inline-table table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row-group table-row grid inline-grid contents list-item hidden">
+        <!-- COLOR CLASSES - все цвета -->
+        <div class="text-inherit text-current text-transparent text-black text-white text-slate-50 text-slate-100 text-slate-200 text-slate-300 text-slate-400 text-slate-500 text-slate-600 text-slate-700 text-slate-800 text-slate-900 text-gray-50 text-gray-100 text-gray-200 text-gray-300 text-gray-400 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900 text-zinc-50 text-zinc-100 text-zinc-200 text-zinc-300 text-zinc-400 text-zinc-500 text-zinc-600 text-zinc-700 text-zinc-800 text-zinc-900 text-neutral-50 text-neutral-100 text-neutral-200 text-neutral-300 text-neutral-400 text-neutral-500 text-neutral-600 text-neutral-700 text-neutral-800 text-neutral-900 text-stone-50 text-stone-100 text-stone-200 text-stone-300 text-stone-400 text-stone-500 text-stone-600 text-stone-700 text-stone-800 text-stone-900 text-red-50 text-red-100 text-red-200 text-red-300 text-red-400 text-red-500 text-red-600 text-red-700 text-red-800 text-red-900 text-orange-50 text-orange-100 text-orange-200 text-orange-300 text-orange-400 text-orange-500 text-orange-600 text-orange-700 text-orange-800 text-orange-900 text-amber-50 text-amber-100 text-amber-200 text-amber-300 text-amber-400 text-amber-500 text-amber-600 text-amber-700 text-amber-800 text-amber-900 text-yellow-50 text-yellow-100 text-yellow-200 text-yellow-300 text-yellow-400 text-yellow-500 text-yellow-600 text-yellow-700 text-yellow-800 text-yellow-900 text-lime-50 text-lime-100 text-lime-200 text-lime-300 text-lime-400 text-lime-500 text-lime-600 text-lime-700 text-lime-800 text-lime-900 text-green-50 text-green-100 text-green-200 text-green-300 text-green-400 text-green-500 text-green-600 text-green-700 text-green-800 text-green-900 text-emerald-50 text-emerald-100 text-emerald-200 text-emerald-300 text-emerald-400 text-emerald-500 text-emerald-600 text-emerald-700 text-emerald-800 text-emerald-900 text-teal-50 text-teal-100 text-teal-200 text-teal-300 text-teal-400 text-teal-500 text-teal-600 text-teal-700 text-teal-800 text-teal-900 text-cyan-50 text-cyan-100 text-cyan-200 text-cyan-300 text-cyan-400 text-cyan-500 text-cyan-600 text-cyan-700 text-cyan-800 text-cyan-900 text-sky-50 text-sky-100 text-sky-200 text-sky-300 text-sky-400 text-sky-500 text-sky-600 text-sky-700 text-sky-800 text-sky-900 text-blue-50 text-blue-100 text-blue-200 text-blue-300 text-blue-400 text-blue-500 text-blue-600 text-blue-700 text-blue-800 text-blue-900 text-indigo-50 text-indigo-100 text-indigo-200 text-indigo-300 text-indigo-400 text-indigo-500 text-indigo-600 text-indigo-700 text-indigo-800 text-indigo-900 text-violet-50 text-violet-100 text-violet-200 text-violet-300 text-violet-400 text-violet-500 text-violet-600 text-violet-700 text-violet-800 text-violet-900 text-purple-50 text-purple-100 text-purple-200 text-purple-300 text-purple-400 text-purple-500 text-purple-600 text-purple-700 text-purple-800 text-purple-900 text-fuchsia-50 text-fuchsia-100 text-fuchsia-200 text-fuchsia-300 text-fuchsia-400 text-fuchsia-500 text-fuchsia-600 text-fuchsia-700 text-fuchsia-800 text-fuchsia-900 text-pink-50 text-pink-100 text-pink-200 text-pink-300 text-pink-400 text-pink-500 text-pink-600 text-pink-700 text-pink-800 text-pink-900 text-rose-50 text-rose-100 text-rose-200 text-rose-300 text-rose-400 text-rose-500 text-rose-600 text-rose-700 text-rose-800 text-rose-900">
         
-        <!-- Position -->
-        <div class="static relative absolute fixed sticky">
-        <div class="top-0 top-1 top-2 top-4 right-0 right-1 right-2 right-4 bottom-0 bottom-1 bottom-2 bottom-4 left-0 left-1 left-2 left-4">
-        <div class="inset-0 inset-1 inset-2 inset-4 inset-x-0 inset-y-0">
-        
-        <!-- Z-Index -->
-        <div class="z-0 z-10 z-20 z-30 z-40 z-50 z-auto">
-        
-        <!-- Overflow -->
-        <div class="overflow-auto overflow-hidden overflow-visible overflow-scroll overflow-x-auto overflow-y-auto overflow-x-hidden overflow-y-hidden overflow-x-visible overflow-y-visible overflow-x-scroll overflow-y-scroll">
-        
-        <!-- Shadows -->
-        <div class="shadow shadow-sm shadow-md shadow-lg shadow-xl shadow-2xl shadow-inner shadow-none">
-        
-        <!-- Opacity -->
-        <div class="opacity-0 opacity-5 opacity-10 opacity-20 opacity-25 opacity-30 opacity-40 opacity-50 opacity-60 opacity-70 opacity-75 opacity-80 opacity-90 opacity-95 opacity-100">
-        
-        <!-- Transitions -->
-        <div class="transition transition-none transition-all transition-colors transition-opacity transition-shadow transition-transform">
+        <!-- И так далее для всех остальных утилит... -->
+        <div class="animate-none animate-spin animate-ping animate-pulse animate-bounce">
+        <div class="transition-none transition-all transition-colors transition-opacity transition-shadow transition-transform">
         <div class="duration-75 duration-100 duration-150 duration-200 duration-300 duration-500 duration-700 duration-1000">
         <div class="ease-linear ease-in ease-out ease-in-out">
         
-        <!-- Transforms -->
-        <div class="transform transform-gpu transform-none">
-        <div class="scale-0 scale-50 scale-75 scale-90 scale-95 scale-100 scale-105 scale-110 scale-125 scale-150">
-        <div class="rotate-0 rotate-1 rotate-2 rotate-3 rotate-6 rotate-12 rotate-45 rotate-90 rotate-180">
-        <div class="translate-x-0 translate-x-1 translate-x-2 translate-x-4 translate-y-0 translate-y-1 translate-y-2 translate-y-4">
-        
-        <!-- Interactivity -->
-        <div class="cursor-auto cursor-default cursor-pointer cursor-wait cursor-text cursor-move cursor-help cursor-not-allowed">
-        <div class="select-none select-text select-all select-auto">
-        <div class="pointer-events-none pointer-events-auto">
-        
-        <!-- Responsive prefixes -->
+        <!-- RESPONSIVE И HOVER КЛАССЫ -->
         <div class="sm:block sm:flex md:block md:flex lg:block lg:flex xl:block xl:flex 2xl:block 2xl:flex">
-        <div class="sm:p-4 md:p-6 lg:p-8 xl:p-10">
-        <div class="sm:text-sm md:text-base lg:text-lg xl:text-xl">
-        <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
+        <div class="hover:bg-gray-50 hover:text-gray-900 focus:bg-blue-50 active:bg-blue-100">
         
-        <!-- Hover states -->
-        <div class="hover:bg-gray-50 hover:bg-gray-100 hover:bg-gray-200 hover:text-gray-600 hover:text-gray-700 hover:text-gray-800">
-        <div class="hover:shadow hover:shadow-md hover:shadow-lg hover:opacity-75 hover:opacity-100">
-        <div class="hover:scale-105 hover:scale-110 hover:rotate-1 hover:rotate-3">
+        <!-- Закрываем все div'ы -->
+        </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
         
-        <!-- Focus states -->
-        <div class="focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-        <div class="focus:bg-white focus:text-black focus:border-blue-500">
-        
-        <!-- Active states -->
-        <div class="active:bg-gray-200 active:transform active:scale-95">
-        
-        <!-- Space and Divide -->
-        <div class="space-x-1 space-x-2 space-x-3 space-x-4 space-x-6 space-x-8">
-        <div class="space-y-1 space-y-2 space-y-3 space-y-4 space-y-6 space-y-8">
-        <div class="divide-x divide-y divide-gray-200 divide-gray-300">
-        
-        </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></span></p></h1></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
         </body>
         </html>
         EOF
         
-    - name: Build Tailwind CSS
+    - name: Build COMPLETE Tailwind CSS with ALL classes
       run: |
-        echo "Создаем Tailwind CSS с полным набором классов..."
+        echo "🚀 Создаем МАКСИМАЛЬНО ПОЛНУЮ сборку Tailwind CSS..."
+        echo "Это может занять больше времени, но даст полный CSS со всеми классами!"
+        
+        # Генерируем CSS с полным сканированием содержимого
         ./tailwindcss -i ./src/input.css -o ./assets/tailwind.min.css --minify
         
         if [ -f assets/tailwind.min.css ]; then
-          echo "✅ CSS создан в assets/tailwind.min.css"
+          echo "✅ ПОЛНЫЙ CSS создан в assets/tailwind.min.css"
           echo "📊 Размер файла:"
           ls -lh assets/tailwind.min.css
-          echo "📄 Первые строки:"
-          head -3 assets/tailwind.min.css
+          echo "📄 Количество строк в CSS:"
+          wc -l assets/tailwind.min.css
+          echo "🔍 Примеры классов в файле:"
+          grep -o '\.[a-z-]*:' assets/tailwind.min.css | head -20 | tr -d ':'
         else
           echo "❌ Ошибка создания CSS"
           exit 1
         fi
         
-    - name: Update HTML
+    - name: Update HTML with local CSS
       run: |
         python3 << 'EOF'
         import re
@@ -181,24 +263,23 @@ jobs:
         with open('index.html', 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Удаляем существующие ссылки на CSS
-        content = re.sub(r'<link rel="stylesheet" href="\./assets/tailwind\.min\.css">', '', content)
-        content = re.sub(r'<link rel="stylesheet" href="\./css/tailwind\.min\.css">', '', content)
+        # Удаляем все существующие ссылки на CSS
+        content = re.sub(r'<link rel="stylesheet" href="[^"]*tailwind[^"]*">', '', content)
         
-        # Находим первый script и добавляем CSS после него
+        # Ищем первый script и добавляем CSS после него
         first_script_end = content.find('</script>')
         if first_script_end != -1:
             insert_pos = first_script_end + len('</script>')
-            css_link = '\n\n<!-- Локальный Tailwind CSS -->\n<link rel="stylesheet" href="./assets/tailwind.min.css">\n'
+            css_link = '\n\n<!-- ПОЛНЫЙ локальный Tailwind CSS -->\n<link rel="stylesheet" href="./assets/tailwind.min.css">\n'
             content = content[:insert_pos] + css_link + content[insert_pos:]
-            print("✅ Добавлена ссылка на локальный CSS")
+            print("✅ Добавлена ссылка на ПОЛНЫЙ локальный CSS")
         
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(content)
         EOF
         
     - name: Cleanup
-      run: rm -f tailwindcss temp-classes.html
+      run: rm -f tailwindcss complete-classes.html
         
     - name: Check changes
       id: verify-changed-files
@@ -207,6 +288,9 @@ jobs:
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "✅ Обнаружены изменения"
           git status --porcelain
+          echo ""
+          echo "📈 Итоговый размер CSS файла:"
+          du -h assets/tailwind.min.css
         else
           echo "changed=false" >> $GITHUB_OUTPUT
           echo "ℹ️ Изменений нет"
@@ -216,7 +300,7 @@ jobs:
       if: steps.verify-changed-files.outputs.changed == 'true'
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: '🎨 Добавить полную сборку Tailwind CSS [skip ci]'
+        commit_message: '🎨 Создать МАКСИМАЛЬНО ПОЛНУЮ сборку Tailwind CSS со всеми классами [skip ci]'
         file_pattern: 'assets/tailwind.min.css src/input.css tailwind.config.js index.html'
         commit_user_name: 'GitHub Action'
         commit_user_email: 'action@github.com'
