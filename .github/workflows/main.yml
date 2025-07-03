@@ -34,7 +34,6 @@ jobs:
         @tailwind components;
         @tailwind utilities;
 
-        /* Дополнительные утилиты для вашего проекта */
         @layer utilities {
           .container-max-width { max-width: 48rem; }
           .flex-center { display: flex; align-items: center; justify-content: center; }
@@ -57,8 +56,7 @@ jobs:
         module.exports = {
           content: [
             "./index.html",
-            "./src/**/*.{html,js}",
-            "./**/*.html"
+            "./temp-classes.html"
           ],
           theme: {
             extend: {
@@ -82,30 +80,11 @@ jobs:
                 'on-background': 'var(--color-on-background)',
                 'outline': 'var(--color-outline)',
                 'outline-variant': 'var(--color-outline-variant)',
-              },
-              spacing: {
-                '18': '4.5rem',
-                '88': '22rem',
-              },
-              animation: {
-                'fade-in': 'fadeIn 0.5s ease-in-out',
-                'slide-up': 'slideUp 0.3s ease-out',
-              },
-              keyframes: {
-                fadeIn: {
-                  '0%': { opacity: '0' },
-                  '100%': { opacity: '1' },
-                },
-                slideUp: {
-                  '0%': { transform: 'translateY(10px)', opacity: '0' },
-                  '100%': { transform: 'translateY(0)', opacity: '1' },
-                }
               }
             },
           },
           plugins: [],
           safelist: [
-            // Основные утилиты
             'container', 'mx-auto', 'p-4', 'p-6', 'py-4', 'px-4', 'py-6', 'px-6',
             'mt-4', 'mt-6', 'mt-16', 'mb-4', 'mb-6', 'ml-4', 'mr-4',
             'w-full', 'w-auto', 'h-full', 'h-auto', 'min-h-screen',
@@ -127,107 +106,50 @@ jobs:
             'cursor-pointer', 'pointer-events-none',
             'select-none', 'user-select-none',
             'overflow-hidden', 'overflow-auto', 'overflow-y-auto',
-            'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-4xl',
-            // Цвета Material Design
-            'bg-primary', 'bg-primary-container', 'bg-secondary', 'bg-secondary-container',
-            'bg-surface', 'bg-surface-variant', 'bg-background',
-            'text-primary', 'text-on-primary', 'text-on-primary-container',
-            'text-secondary', 'text-on-secondary', 'text-on-secondary-container',
-            'text-on-surface', 'text-on-surface-variant', 'text-on-background',
-            'border-primary', 'border-secondary', 'border-outline', 'border-outline-variant',
-            // Responsive утилиты
-            'sm:text-lg', 'md:text-xl', 'lg:text-2xl',
-            'sm:p-6', 'md:p-8', 'lg:p-10',
-            'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4',
-            'sm:max-w-md', 'md:max-w-lg', 'lg:max-w-xl',
+            'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-4xl'
           ]
         }
         EOF
         
-    - name: Generate sample HTML content for scanning
+    - name: Generate sample HTML for class scanning
       run: |
         cat > temp-classes.html << 'EOF'
-        <!DOCTYPE html>
-        <html>
-        <head><title>Temp</title></head>
-        <body>
-        <!-- Основные layout классы -->
+        <html><body>
         <div class="container mx-auto max-w-4xl p-4 py-6 px-6">
           <div class="flex flex-col items-center justify-center space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              
-        <!-- Карточки и кнопки -->
-        <div class="bg-white bg-surface bg-surface-variant rounded-lg rounded-xl shadow-md shadow-lg p-6">
-          <h2 class="text-xl text-2xl font-bold font-semibold text-primary mb-4">
-          <p class="text-gray-600 text-on-surface-variant mb-6">
-          <button class="btn bg-primary text-on-primary hover:bg-primary-container px-6 py-3 rounded-full transition-all">
-          <a class="btn-outlined border border-outline text-primary hover:bg-primary-container">
-        </div>
-        
-        <!-- Формы и инпуты -->
-        <form class="space-y-4 w-full max-w-md">
-          <input class="w-full p-3 border border-gray-300 rounded-lg focus:border-primary bg-surface">
-          <textarea class="w-full p-3 border rounded-lg bg-surface-variant"></textarea>
-          <select class="w-full p-3 border rounded-lg bg-surface"></select>
-        </form>
-        
-        <!-- Навигация и меню -->
-        <nav class="fixed top-0 left-0 w-full bg-primary-container z-50">
-          <div class="flex justify-between items-center p-4">
-            <div class="flex items-center space-x-4">
-              <span class="material-symbols-outlined text-on-primary-container">menu</span>
+              <div class="bg-white bg-surface bg-surface-variant rounded-lg rounded-xl shadow-md shadow-lg p-6">
+                <h2 class="text-xl text-2xl font-bold font-semibold text-primary mb-4">Title</h2>
+                <p class="text-gray-600 text-on-surface-variant mb-6">Text</p>
+                <button class="btn bg-primary text-on-primary hover:bg-primary-container px-6 py-3 rounded-full transition-all">Button</button>
+              </div>
             </div>
           </div>
+        </div>
+        <nav class="fixed top-0 left-0 w-full bg-primary-container z-50">
+          <div class="flex justify-between items-center p-4">
+            <span class="material-symbols-outlined text-on-primary-container">menu</span>
+          </div>
         </nav>
-        
-        <!-- Модальные окна -->
         <div class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
           <div class="bg-surface rounded-xl p-6 max-w-lg w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-on-surface">Modal</h3>
-              <button class="text-on-surface-variant hover:text-primary">×</button>
             </div>
           </div>
         </div>
-        
-        <!-- Списки и элементы -->
-        <ul class="space-y-2">
-          <li class="flex items-center justify-between p-3 bg-surface-variant rounded-lg">
-            <span class="text-on-surface">Item</span>
-            <span class="material-symbols-outlined text-primary">arrow_forward</span>
-          </li>
-        </ul>
-        
-        <!-- Бейджи и статусы -->
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-secondary-container text-on-secondary-container">
-        <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">Error</span>
-        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Success</span>
-        
-        <!-- Утилиты и анимации -->
-        <div class="animate-spin animate-pulse animate-fade-in transition-opacity duration-300">
-        <div class="transform hover:scale-105 hover:shadow-lg cursor-pointer">
-        <div class="absolute relative opacity-0 opacity-50 opacity-100 pointer-events-none">
-        <div class="overflow-hidden overflow-auto overflow-y-auto max-h-96">
-        
-        </div></div></div></div></div></span></span></li></ul></div></div></div></button></a></p></h2></div></div></div></form></nav></div></body></html>
+        </body></html>
         EOF
         
     - name: Build comprehensive Tailwind CSS
       run: |
         echo "Создаем полную сборку Tailwind CSS..."
-        # Объединяем весь контент для сканирования
-        cat index.html temp-classes.html > combined-content.html
+        ./tailwindcss -i ./src/input.css -o ./assets/tailwind.min.css --minify
         
-        # Генерируем CSS на основе всего контента
-        ./tailwindcss -i ./src/input.css -o ./assets/tailwind.min.css --minify --content "./combined-content.html"
-        
-        # Проверяем размер
         if [ -f assets/tailwind.min.css ]; then
           echo "✅ Полный CSS создан в assets/tailwind.min.css"
           echo "📊 Размер файла:"
           ls -lh assets/tailwind.min.css
-          echo "📝 Количество строк:"
-          wc -l assets/tailwind.min.css
         else
           echo "❌ Ошибка создания CSS файла"
           exit 1
@@ -241,23 +163,19 @@ jobs:
         with open('index.html', 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Найти и заменить существующую ссылку на CSS
-        content = re.sub(
-            r'<link rel="stylesheet" href="\./assets/tailwind\.min\.css">',
-            '',
-            content
-        )
+        # Удаляем существующие ссылки на CSS
+        content = re.sub(r'<link rel="stylesheet" href="\./assets/tailwind\.min\.css">', '', content)
+        content = re.sub(r'<link rel="stylesheet" href="\./css/tailwind\.min\.css">', '', content)
         
-        # Найти конец первого script блока и вставить гибридную загрузку
+        # Находим конец первого script блока
         first_script_end = content.find('</script>')
         if first_script_end != -1:
             insert_pos = first_script_end + len('</script>')
             
             hybrid_css = '''
 
-<!-- Гибридная загрузка Tailwind CSS: локальный + CDN fallback -->
+<!-- Гибридная загрузка Tailwind CSS -->
 <script>
-  // Функция для загрузки CSS
   function loadCSS(href, onSuccess, onError) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -268,21 +186,13 @@ jobs:
     return link;
   }
 
-  // Сначала пробуем локальный CSS
   loadCSS("./assets/tailwind.min.css", 
-    function() { 
-      console.log("✅ Локальный Tailwind CSS загружен"); 
-    },
+    function() { console.log("✅ Локальный Tailwind CSS загружен"); },
     function() {
       console.warn("⚠️ Локальный CSS недоступен, загружаю CDN...");
-      // Fallback на CDN
       loadCSS("https://cdn.tailwindcss.com", 
-        function() { 
-          console.log("✅ Tailwind CSS загружен с CDN"); 
-        },
-        function() {
-          console.error("❌ Не удалось загрузить Tailwind CSS");
-        }
+        function() { console.log("✅ Tailwind CSS загружен с CDN"); },
+        function() { console.error("❌ Не удалось загрузить Tailwind CSS"); }
       );
     }
   );
@@ -297,7 +207,7 @@ jobs:
         
     - name: Cleanup and verify
       run: |
-        rm -f tailwindcss temp-classes.html combined-content.html
+        rm -f tailwindcss temp-classes.html
         
         echo "📊 Финальная проверка CSS файла:"
         head -5 assets/tailwind.min.css
@@ -310,8 +220,7 @@ jobs:
       run: |
         if [ -n "$(git status --porcelain)" ]; then
           echo "changed=true" >> $GITHUB_OUTPUT
-          echo "✅ Обнаружены изменения:"
-          git status --porcelain
+          echo "✅ Обнаружены изменения"
         else
           echo "changed=false" >> $GITHUB_OUTPUT
         fi
