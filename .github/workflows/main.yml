@@ -1,0 +1,109 @@
+name: Build Tailwind CSS
+
+on:
+  push:
+    branches: [ main, master, localize ]
+  workflow_dispatch:
+
+jobs:
+  build-css:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        
+    - name: Create assets directory
+      run: mkdir -p assets src
+      
+    - name: Download Tailwind CSS standalone
+      run: |
+        curl -sLo tailwindcss "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64"
+        chmod +x tailwindcss
+        
+    - name: Create Tailwind config and input files
+      run: |
+        cat > src/input.css << 'EOF'
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        EOF
+        
+        cat > tailwind.config.js << 'EOF'
+        module.exports = {
+          content: ["./index.html"],
+          theme: { extend: {} },
+          plugins: []
+        }
+        EOF
+        
+    - name: Build Tailwind CSS
+      run: |
+        ./tailwindcss -i ./src/input.css -o ./assets/tailwind.min.css --minify
+        echo "✅ CSS создан в assets/tailwind.min.css"
+        ls -lh assets/tailwind.min.css
+        
+    - name: Fix HTML for proper CSS loading
+      run: |
+        python3 << 'EOF'
+        import re
+        
+        with open('index.html', 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Удаляем существующую ссылку на css/tailwind.min.css
+        content = re.sub(r'<link rel="stylesheet" href="\./css/tailwind\.min\.css">', '', content)
+        
+        # Ищем и заменяем блок загрузки шрифтов, добавляем CSS ссылку после него
+        font_block_end = content.find('</script>')
+        if font_block_end != -1:
+            # Находим конец первого script блока (шрифты)
+            insert_pos = font_block_end + len('</script>')
+            
+            # Вставляем ссылку на CSS
+            css_link = '\n\n<!-- Локальный Tailwind CSS -->\n<link rel="stylesheet" href="./assets/tailwind.min.css">\n'
+            content = content[:insert_pos] + css_link + content[insert_pos:]
+            
+            print("✅ Добавлена правильная ссылка на CSS")
+        else:
+            print("❌ Не найден блок шрифтов")
+        
+        with open('index.html', 'w', encoding='utf-8') as f:
+            f.write(content)
+        EOF
+        
+    - name: Verify CSS file content
+      run: |
+        echo "📊 Проверяем содержимое CSS файла:"
+        head -5 assets/tailwind.min.css
+        echo ""
+        echo "📏 Размер файла:"
+        ls -lh assets/tailwind.min.css
+        
+    - name: Check changes and cleanup
+      id: verify-changed-files
+      run: |
+        rm -f tailwindcss
+        
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "✅ Обнаружены изменения:"
+          git status --porcelain
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Commit and push changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: '🎨 Исправить загрузку локального Tailwind CSS [skip ci]'
+        file_pattern: 'assets/tailwind.min.css src/input.css tailwind.config.js index.html'
+        commit_user_name: 'GitHub Action'
+        commit_user_email: 'action@github.com'
