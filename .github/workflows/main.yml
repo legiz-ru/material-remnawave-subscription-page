@@ -27,30 +27,15 @@ jobs:
         curl -sLo tailwindcss "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64"
         chmod +x tailwindcss
         
-    - name: Create comprehensive Tailwind input
+    - name: Create Tailwind input
       run: |
         cat > src/input.css << 'EOF'
         @tailwind base;
         @tailwind components;
         @tailwind utilities;
-
-        @layer utilities {
-          .container-max-width { max-width: 48rem; }
-          .flex-center { display: flex; align-items: center; justify-content: center; }
-          .text-balance { text-wrap: balance; }
-          .transition-all { transition: all 0.3s ease; }
-          .space-y-4 > * + * { margin-top: 1rem; }
-          .space-y-6 > * + * { margin-top: 1.5rem; }
-          .space-x-4 > * + * { margin-left: 1rem; }
-          .gap-4 { gap: 1rem; }
-          .gap-6 { gap: 1.5rem; }
-          .rounded-xl { border-radius: 0.75rem; }
-          .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-          .backdrop-blur { backdrop-filter: blur(8px); }
-        }
         EOF
         
-    - name: Create comprehensive Tailwind config
+    - name: Create Tailwind config
       run: |
         cat > tailwind.config.js << 'EOF'
         module.exports = {
@@ -59,103 +44,136 @@ jobs:
             "./temp-classes.html"
           ],
           theme: {
-            extend: {
-              fontFamily: {
-                'inter': ['Inter', 'sans-serif'],
-              },
-              colors: {
-                'primary': 'var(--color-primary)',
-                'on-primary': 'var(--color-on-primary)',
-                'primary-container': 'var(--color-primary-container)',
-                'on-primary-container': 'var(--color-on-primary-container)',
-                'secondary': 'var(--color-secondary)',
-                'on-secondary': 'var(--color-on-secondary)',
-                'secondary-container': 'var(--color-secondary-container)',
-                'on-secondary-container': 'var(--color-on-secondary-container)',
-                'surface': 'var(--color-surface)',
-                'on-surface': 'var(--color-on-surface)',
-                'surface-variant': 'var(--color-surface-variant)',
-                'on-surface-variant': 'var(--color-on-surface-variant)',
-                'background': 'var(--color-background)',
-                'on-background': 'var(--color-on-background)',
-                'outline': 'var(--color-outline)',
-                'outline-variant': 'var(--color-outline-variant)',
-              }
-            },
+            extend: {}
           },
-          plugins: [],
-          safelist: [
-            'container', 'mx-auto', 'p-4', 'p-6', 'py-4', 'px-4', 'py-6', 'px-6',
-            'mt-4', 'mt-6', 'mt-16', 'mb-4', 'mb-6', 'ml-4', 'mr-4',
-            'w-full', 'w-auto', 'h-full', 'h-auto', 'min-h-screen',
-            'flex', 'flex-col', 'flex-row', 'items-center', 'justify-center', 'justify-between',
-            'grid', 'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'gap-4', 'gap-6',
-            'text-center', 'text-left', 'text-right',
-            'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl',
-            'font-normal', 'font-medium', 'font-semibold', 'font-bold',
-            'bg-transparent', 'bg-white', 'bg-gray-50', 'bg-gray-100', 'bg-gray-900',
-            'text-white', 'text-gray-600', 'text-gray-700', 'text-gray-900',
-            'border', 'border-gray-200', 'border-gray-300', 'rounded', 'rounded-lg', 'rounded-xl', 'rounded-full',
-            'shadow', 'shadow-sm', 'shadow-md', 'shadow-lg',
-            'hover:bg-gray-50', 'hover:bg-gray-100', 'hover:shadow-lg',
-            'transition', 'transition-all', 'duration-200', 'duration-300',
-            'opacity-0', 'opacity-50', 'opacity-100',
-            'hidden', 'block', 'inline-block', 'inline-flex',
-            'relative', 'absolute', 'fixed', 'top-0', 'bottom-0', 'left-0', 'right-0',
-            'z-10', 'z-20', 'z-30', 'z-40', 'z-50',
-            'cursor-pointer', 'pointer-events-none',
-            'select-none', 'user-select-none',
-            'overflow-hidden', 'overflow-auto', 'overflow-y-auto',
-            'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-4xl'
-          ]
+          plugins: []
         }
         EOF
         
-    - name: Generate sample HTML for class scanning
+    - name: Generate comprehensive HTML for scanning
       run: |
         cat > temp-classes.html << 'EOF'
-        <html><body>
-        <div class="container mx-auto max-w-4xl p-4 py-6 px-6">
-          <div class="flex flex-col items-center justify-center space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div class="bg-white bg-surface bg-surface-variant rounded-lg rounded-xl shadow-md shadow-lg p-6">
-                <h2 class="text-xl text-2xl font-bold font-semibold text-primary mb-4">Title</h2>
-                <p class="text-gray-600 text-on-surface-variant mb-6">Text</p>
-                <button class="btn bg-primary text-on-primary hover:bg-primary-container px-6 py-3 rounded-full transition-all">Button</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <nav class="fixed top-0 left-0 w-full bg-primary-container z-50">
-          <div class="flex justify-between items-center p-4">
-            <span class="material-symbols-outlined text-on-primary-container">menu</span>
-          </div>
-        </nav>
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
-          <div class="bg-surface rounded-xl p-6 max-w-lg w-full mx-4 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-on-surface">Modal</h3>
-            </div>
-          </div>
-        </div>
-        </body></html>
+        <!DOCTYPE html>
+        <html>
+        <body>
+        <!-- Layout Classes -->
+        <div class="container mx-auto max-w-sm max-w-md max-w-lg max-w-xl max-w-2xl max-w-4xl max-w-6xl">
+          <div class="p-1 p-2 p-3 p-4 p-5 p-6 p-8 px-2 px-3 px-4 px-6 py-2 py-3 py-4 py-6">
+            <div class="m-1 m-2 m-3 m-4 m-6 mx-2 mx-4 mx-auto my-2 my-4 my-6">
+              <div class="mt-2 mt-4 mt-6 mt-8 mb-2 mb-4 mb-6 ml-2 ml-4 mr-2 mr-4">
+        
+        <!-- Flexbox -->
+        <div class="flex flex-col flex-row items-start items-center items-end justify-start justify-center justify-between justify-around">
+          <div class="flex-1 flex-auto flex-none flex-grow flex-shrink">
+        
+        <!-- Grid -->
+        <div class="grid grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-6 grid-cols-12">
+          <div class="gap-1 gap-2 gap-3 gap-4 gap-6 gap-8">
+        
+        <!-- Sizing -->
+        <div class="w-full w-auto w-1/2 w-1/3 w-1/4 w-2/3 w-3/4 h-full h-auto h-screen min-h-screen">
+          <div class="min-w-0 min-w-full max-w-none max-w-xs">
+        
+        <!-- Typography -->
+        <h1 class="text-xs text-sm text-base text-lg text-xl text-2xl text-3xl text-4xl">
+        <p class="font-thin font-light font-normal font-medium font-semibold font-bold font-extrabold">
+        <span class="text-left text-center text-right text-justify">
+        <div class="leading-3 leading-4 leading-5 leading-6 leading-7 leading-8">
+        
+        <!-- Colors -->
+        <div class="text-white text-black text-gray-50 text-gray-100 text-gray-200 text-gray-300 text-gray-400 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900">
+        <div class="bg-white bg-black bg-gray-50 bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900">
+        <div class="bg-transparent bg-current">
+        
+        <!-- Borders -->
+        <div class="border border-0 border-2 border-4 border-8">
+        <div class="border-solid border-dashed border-dotted border-double border-none">
+        <div class="border-gray-100 border-gray-200 border-gray-300 border-gray-400 border-gray-500">
+        <div class="border-t border-r border-b border-l">
+        <div class="rounded rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-3xl rounded-full">
+        <div class="rounded-t rounded-r rounded-b rounded-l">
+        
+        <!-- Display -->
+        <div class="block inline inline-block flex inline-flex table inline-table table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row-group table-row grid inline-grid contents list-item hidden">
+        
+        <!-- Position -->
+        <div class="static relative absolute fixed sticky">
+        <div class="top-0 top-1 top-2 top-4 right-0 right-1 right-2 right-4 bottom-0 bottom-1 bottom-2 bottom-4 left-0 left-1 left-2 left-4">
+        <div class="inset-0 inset-1 inset-2 inset-4 inset-x-0 inset-y-0">
+        
+        <!-- Z-Index -->
+        <div class="z-0 z-10 z-20 z-30 z-40 z-50 z-auto">
+        
+        <!-- Overflow -->
+        <div class="overflow-auto overflow-hidden overflow-visible overflow-scroll overflow-x-auto overflow-y-auto overflow-x-hidden overflow-y-hidden overflow-x-visible overflow-y-visible overflow-x-scroll overflow-y-scroll">
+        
+        <!-- Shadows -->
+        <div class="shadow shadow-sm shadow-md shadow-lg shadow-xl shadow-2xl shadow-inner shadow-none">
+        
+        <!-- Opacity -->
+        <div class="opacity-0 opacity-5 opacity-10 opacity-20 opacity-25 opacity-30 opacity-40 opacity-50 opacity-60 opacity-70 opacity-75 opacity-80 opacity-90 opacity-95 opacity-100">
+        
+        <!-- Transitions -->
+        <div class="transition transition-none transition-all transition-colors transition-opacity transition-shadow transition-transform">
+        <div class="duration-75 duration-100 duration-150 duration-200 duration-300 duration-500 duration-700 duration-1000">
+        <div class="ease-linear ease-in ease-out ease-in-out">
+        
+        <!-- Transforms -->
+        <div class="transform transform-gpu transform-none">
+        <div class="scale-0 scale-50 scale-75 scale-90 scale-95 scale-100 scale-105 scale-110 scale-125 scale-150">
+        <div class="rotate-0 rotate-1 rotate-2 rotate-3 rotate-6 rotate-12 rotate-45 rotate-90 rotate-180">
+        <div class="translate-x-0 translate-x-1 translate-x-2 translate-x-4 translate-y-0 translate-y-1 translate-y-2 translate-y-4">
+        
+        <!-- Interactivity -->
+        <div class="cursor-auto cursor-default cursor-pointer cursor-wait cursor-text cursor-move cursor-help cursor-not-allowed">
+        <div class="select-none select-text select-all select-auto">
+        <div class="pointer-events-none pointer-events-auto">
+        
+        <!-- Responsive prefixes -->
+        <div class="sm:block sm:flex md:block md:flex lg:block lg:flex xl:block xl:flex 2xl:block 2xl:flex">
+        <div class="sm:p-4 md:p-6 lg:p-8 xl:p-10">
+        <div class="sm:text-sm md:text-base lg:text-lg xl:text-xl">
+        <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
+        
+        <!-- Hover states -->
+        <div class="hover:bg-gray-50 hover:bg-gray-100 hover:bg-gray-200 hover:text-gray-600 hover:text-gray-700 hover:text-gray-800">
+        <div class="hover:shadow hover:shadow-md hover:shadow-lg hover:opacity-75 hover:opacity-100">
+        <div class="hover:scale-105 hover:scale-110 hover:rotate-1 hover:rotate-3">
+        
+        <!-- Focus states -->
+        <div class="focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+        <div class="focus:bg-white focus:text-black focus:border-blue-500">
+        
+        <!-- Active states -->
+        <div class="active:bg-gray-200 active:transform active:scale-95">
+        
+        <!-- Space and Divide -->
+        <div class="space-x-1 space-x-2 space-x-3 space-x-4 space-x-6 space-x-8">
+        <div class="space-y-1 space-y-2 space-y-3 space-y-4 space-y-6 space-y-8">
+        <div class="divide-x divide-y divide-gray-200 divide-gray-300">
+        
+        </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></span></p></h1></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+        </body>
+        </html>
         EOF
         
-    - name: Build comprehensive Tailwind CSS
+    - name: Build Tailwind CSS
       run: |
-        echo "Создаем полную сборку Tailwind CSS..."
+        echo "Создаем Tailwind CSS с полным набором классов..."
         ./tailwindcss -i ./src/input.css -o ./assets/tailwind.min.css --minify
         
         if [ -f assets/tailwind.min.css ]; then
-          echo "✅ Полный CSS создан в assets/tailwind.min.css"
+          echo "✅ CSS создан в assets/tailwind.min.css"
           echo "📊 Размер файла:"
           ls -lh assets/tailwind.min.css
+          echo "📄 Первые строки:"
+          head -3 assets/tailwind.min.css
         else
-          echo "❌ Ошибка создания CSS файла"
+          echo "❌ Ошибка создания CSS"
           exit 1
         fi
         
-    - name: Update HTML with hybrid loading
+    - name: Update HTML
       run: |
         python3 << 'EOF'
         import re
@@ -167,53 +185,20 @@ jobs:
         content = re.sub(r'<link rel="stylesheet" href="\./assets/tailwind\.min\.css">', '', content)
         content = re.sub(r'<link rel="stylesheet" href="\./css/tailwind\.min\.css">', '', content)
         
-        # Находим конец первого script блока
+        # Находим первый script и добавляем CSS после него
         first_script_end = content.find('</script>')
         if first_script_end != -1:
             insert_pos = first_script_end + len('</script>')
-            
-            hybrid_css = '''
-
-<!-- Гибридная загрузка Tailwind CSS -->
-<script>
-  function loadCSS(href, onSuccess, onError) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = href;
-    link.onload = onSuccess || function() {};
-    link.onerror = onError || function() {};
-    document.head.appendChild(link);
-    return link;
-  }
-
-  loadCSS("./assets/tailwind.min.css", 
-    function() { console.log("✅ Локальный Tailwind CSS загружен"); },
-    function() {
-      console.warn("⚠️ Локальный CSS недоступен, загружаю CDN...");
-      loadCSS("https://cdn.tailwindcss.com", 
-        function() { console.log("✅ Tailwind CSS загружен с CDN"); },
-        function() { console.error("❌ Не удалось загрузить Tailwind CSS"); }
-      );
-    }
-  );
-</script>'''
-            
-            content = content[:insert_pos] + hybrid_css + content[insert_pos:]
-            print("✅ Добавлена гибридная загрузка CSS")
+            css_link = '\n\n<!-- Локальный Tailwind CSS -->\n<link rel="stylesheet" href="./assets/tailwind.min.css">\n'
+            content = content[:insert_pos] + css_link + content[insert_pos:]
+            print("✅ Добавлена ссылка на локальный CSS")
         
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(content)
         EOF
         
-    - name: Cleanup and verify
-      run: |
-        rm -f tailwindcss temp-classes.html
-        
-        echo "📊 Финальная проверка CSS файла:"
-        head -5 assets/tailwind.min.css
-        echo ""
-        echo "Размер файла:"
-        du -h assets/tailwind.min.css
+    - name: Cleanup
+      run: rm -f tailwindcss temp-classes.html
         
     - name: Check changes
       id: verify-changed-files
@@ -221,15 +206,17 @@ jobs:
         if [ -n "$(git status --porcelain)" ]; then
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "✅ Обнаружены изменения"
+          git status --porcelain
         else
           echo "changed=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ Изменений нет"
         fi
         
     - name: Commit and push changes
       if: steps.verify-changed-files.outputs.changed == 'true'
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: '🎨 Создать полную сборку Tailwind CSS с гибридной загрузкой [skip ci]'
+        commit_message: '🎨 Добавить полную сборку Tailwind CSS [skip ci]'
         file_pattern: 'assets/tailwind.min.css src/input.css tailwind.config.js index.html'
         commit_user_name: 'GitHub Action'
         commit_user_email: 'action@github.com'
