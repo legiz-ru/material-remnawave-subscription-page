@@ -19,6 +19,8 @@ The ability to add additional groups to the apps section via the integration fil
 
 * **Multi-language Support:** Page available in Russian and English with automatic browser language detection.
 
+* **Telegram Mini App Integration:** You can use the subscription page as a Telegram Mini App within your bot.
+
 ## Screenshots
 
 <div align="center">
