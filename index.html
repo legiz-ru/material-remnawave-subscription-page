@@ -2532,8 +2532,6 @@
                 
                 if (app.isNeedBase64Encoding) {
                     subscriptionUrl = btoa(subscriptionUrl);
-                } else {
-                    subscriptionUrl = encodeURIComponent(subscriptionUrl);
                 }
                 
                 url = app.urlScheme + subscriptionUrl;
