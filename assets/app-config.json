@@ -1,0 +1,263 @@
+{
+  "config": {
+    "additionalLocales": ["fa", "ru", "zh"]
+  },
+  "platforms": {
+    "ios": [
+      {
+        "id": "shadowrocket",
+        "name": "Shadowrocket",
+        "isFeatured": true,
+        "urlScheme": "shadowrocket://add/",
+        "isNeedBase64Encoding": false,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Скачайте и установите приложение Shadowrocket из App Store",
+            "en": "Download and install Shadowrocket app from App Store"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать из App Store",
+                "en": "Download from App Store"
+              },
+              "buttonLink": "https://apps.apple.com/app/shadowrocket/id932747118"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Нажмите кнопку ниже чтобы добавить подписку в приложение",
+            "en": "Click the button below to add subscription to the app"
+          }
+        }
+      }
+    ],
+    "android": [
+      {
+        "id": "v2rayng",
+        "name": "V2rayNG",
+        "isFeatured": true,
+        "urlScheme": "v2rayng://install-config?",
+        "isNeedBase64Encoding": false,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Скачайте и установите приложение V2rayNG",
+            "en": "Download and install V2rayNG app"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать APK",
+                "en": "Download APK"
+              },
+              "buttonLink": "https://github.com/2dust/v2rayNG/releases/latest"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Нажмите кнопку ниже чтобы добавить подписку в приложение",
+            "en": "Click the button below to add subscription to the app"
+          }
+        }
+      }
+    ],
+    "windows": [
+      {
+        "id": "v2rayn",
+        "name": "V2rayN",
+        "isFeatured": true,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Скачайте и установите приложение V2rayN для Windows",
+            "en": "Download and install V2rayN app for Windows"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать с GitHub",
+                "en": "Download from GitHub"
+              },
+              "buttonLink": "https://github.com/2dust/v2rayN/releases/latest"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Скопируйте ссылку подписки и добавьте её в настройках приложения",
+            "en": "Copy subscription link and add it in app settings"
+          }
+        }
+      }
+    ],
+    "macos": [
+      {
+        "id": "clashx",
+        "name": "ClashX",
+        "isFeatured": true,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Скачайте и установите приложение ClashX для macOS",
+            "en": "Download and install ClashX app for macOS"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать с GitHub",
+                "en": "Download from GitHub"
+              },
+              "buttonLink": "https://github.com/yichengchen/clashX/releases/latest"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Скопируйте ссылку подписки и добавьте её в настройках приложения",
+            "en": "Copy subscription link and add it in app settings"
+          }
+        }
+      }
+    ],
+    "linux": [
+      {
+        "id": "v2raya",
+        "name": "V2rayA",
+        "isFeatured": true,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Установите V2rayA для Linux согласно инструкции",
+            "en": "Install V2rayA for Linux following the instructions"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Инструкция по установке",
+                "en": "Installation Guide"
+              },
+              "buttonLink": "https://v2raya.org/docs/prologue/installation/"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Скопируйте ссылку подписки и добавьте её в веб-интерфейсе",
+            "en": "Copy subscription link and add it in web interface"
+          }
+        }
+      }
+    ],
+    "androidTV": [
+      {
+        "id": "v2rayng_tv",
+        "name": "V2rayNG (TV)",
+        "isFeatured": true,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Установите V2rayNG на Android TV через APK файл",
+            "en": "Install V2rayNG on Android TV via APK file"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать APK",
+                "en": "Download APK"
+              },
+              "buttonLink": "https://github.com/2dust/v2rayNG/releases/latest"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Введите ссылку подписки в настройках приложения",
+            "en": "Enter subscription link in app settings"
+          }
+        }
+      }
+    ],
+    "appleTV": [
+      {
+        "id": "fair_vpn",
+        "name": "Fair VPN",
+        "isFeatured": true,
+        "installationStep": {
+          "title": {
+            "ru": "Установка",
+            "en": "Installation"
+          },
+          "description": {
+            "ru": "Скачайте Fair VPN из App Store для Apple TV",
+            "en": "Download Fair VPN from App Store for Apple TV"
+          },
+          "buttons": [
+            {
+              "buttonText": {
+                "ru": "Скачать из App Store",
+                "en": "Download from App Store"
+              },
+              "buttonLink": "https://apps.apple.com/app/fair-vpn/id1533873488"
+            }
+          ]
+        },
+        "addSubscriptionStep": {
+          "title": {
+            "ru": "Добавление подписки",
+            "en": "Add Subscription"
+          },
+          "description": {
+            "ru": "Введите ссылку подписки в настройках приложения",
+            "en": "Enter subscription link in app settings"
+          }
+        }
+      }
+    ]
+  }
+}

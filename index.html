@@ -669,7 +669,26 @@
             font-size: 1.5rem;
         }
 
-        /* OS Tabs */
+        /* OS Tabs - Updated for new platform selector */
+        .platform-selector-container {
+            margin-bottom: 1rem;
+        }
+
+        .platform-selector-btn {
+            min-width: auto;
+            padding: 0.5rem 1rem;
+        }
+
+        .platform-selector-btn .material-symbols-outlined {
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .platform-selector-btn:hover .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+
+        /* Legacy OS Tab support for backward compatibility */
         .os-tab {
             padding: 0.25rem 0.75rem;
             border-bottom: 2px solid transparent;
@@ -1630,6 +1649,22 @@
         'ios': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22.00 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.09,22.00C7.79,22.05 6.80,20.68 5.96,19.47C4.25,17.00 2.94,12.45 4.70,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.10,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.10 19.56,8.82C19.47,8.88 17.39,10.10 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2.00C16.07,3.17 15.60,4.35 14.90,5.19C14.21,6.04 13.07,6.70 11.95,6.61C11.80,5.46 12.36,4.26 13,3.5Z"/>
         </svg>`,
+        'windows': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,12V6.75L9,5.43V11.91L3,12M20,3V11.75L10,11.9V5.21L20,3M3,13L9,13.09V19.9L3,18.75V13M20,13.25V22L10,20.09V13.1L20,13.25Z"/>
+        </svg>`,
+        'macos': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22.00 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.09,22.00C7.79,22.05 6.80,20.68 5.96,19.47C4.25,17.00 2.94,12.45 4.70,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.10,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.10 19.56,8.82C19.47,8.88 17.39,10.10 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2.00C16.07,3.17 15.60,4.35 14.90,5.19C14.21,6.04 13.07,6.70 11.95,6.61C11.80,5.46 12.36,4.26 13,3.5Z"/>
+        </svg>`,
+        'linux': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H16V20A2,2 0 0,1 14,22H10A2,2 0 0,1 8,20V18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2M4,4V16H20V4H4Z"/>
+        </svg>`,
+        'androidTV': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21,3H3C1.89,3 1,3.89 1,5V17A2,2 0 0,0 3,19H8V21H16V19H21A2,2 0 0,0 23,17V5C23,3.89 22.1,3 21,3M21,17H3V5H21V17Z"/>
+        </svg>`,
+        'appleTV': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21,3H3C1.89,3 1,3.89 1,5V17A2,2 0 0,0 3,19H8V21H16V19H21A2,2 0 0,0 23,17V5C23,3.89 22.1,3 21,3M21,17H3V5H21V17Z"/>
+        </svg>`,
+        // Legacy support
         'pc': `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M21,16H3V4H21M21,2H3C1.89,2 1,2.89 1,4V16A2,2 0 0,0 3,18H10V20H8V22H16V20H14V18H21A2,2 0 0,0 23,16V4C23,2.89 22.1,2 21,2Z"/>
         </svg>`
@@ -1639,7 +1674,7 @@
     function getAppIcon(app, platform) {
         if (!app || !app.id) {
             // Если нет ID приложения, используем системную иконку
-            return appIcons[platform] || appIcons['pc'];
+            return appIcons[platform] || appIcons['windows']; // Default to windows icon
         }
 
         // Специальные случаи для ID приложений
@@ -1673,7 +1708,7 @@
         }
 
         // По умолчанию используем системную иконку
-        return appIcons[platform] || appIcons['pc'];
+        return appIcons[platform] || appIcons['windows']; // Default to windows icon for backward compatibility
     }
 
     // Переводы
@@ -1982,23 +2017,48 @@
             const response = await fetch('/assets/app-config.json');
             if (!response.ok) {
                 console.warn('App config not found, using empty config');
-                appsConfig = { ios: [], android: [], pc: [] };
+                appsConfig = { platforms: { ios: [], android: [], windows: [], macos: [], linux: [], androidTV: [], appleTV: [] } };
                 return appsConfig;
             }
             const text = await response.text();
             
             if (text.trim().startsWith('<')) {
                 console.warn('Received HTML instead of JSON - config file not found');
-                appsConfig = { ios: [], android: [], pc: [] };
+                appsConfig = { platforms: { ios: [], android: [], windows: [], macos: [], linux: [], androidTV: [], appleTV: [] } };
                 return appsConfig;
             }
             
-            appsConfig = JSON.parse(text);
-            console.log('Apps config loaded successfully:', appsConfig);
+            const rawConfig = JSON.parse(text);
+            console.log('Raw apps config loaded:', rawConfig);
+            
+            // Handle both old and new config formats
+            if (rawConfig.platforms) {
+                // New format: {config: {...}, platforms: {...}}
+                appsConfig = rawConfig;
+            } else {
+                // Old format: {ios: [...], android: [...], pc: [...]} - convert to new format
+                console.warn('Converting old config format to new format');
+                appsConfig = {
+                    config: {
+                        additionalLocales: ["fa", "ru", "zh"]
+                    },
+                    platforms: {
+                        ios: rawConfig.ios || [],
+                        android: rawConfig.android || [],
+                        windows: rawConfig.pc || [], // Map pc to windows
+                        macos: [],
+                        linux: [],
+                        androidTV: [],
+                        appleTV: []
+                    }
+                };
+            }
+            
+            console.log('Apps config processed successfully:', appsConfig);
             return appsConfig;
         } catch (error) {
             console.error('Failed to load apps config:', error);
-            appsConfig = { ios: [], android: [], pc: [] };
+            appsConfig = { platforms: { ios: [], android: [], windows: [], macos: [], linux: [], androidTV: [], appleTV: [] } };
             return appsConfig;
         }
     }
@@ -2111,8 +2171,15 @@
             subscription_url: response.subscriptionUrl,
             cryptoLink: response.happ?.cryptoLink,
             servers: servers,
-            apps: appsConfig
+            apps: appsConfig.platforms || appsConfig // Support both old and new format
         };
+    }
+
+    // Helper function to check if any platform has apps
+    function hasAnyApps(apps) {
+        if (!apps) return false;
+        const platforms = ['ios', 'android', 'windows', 'macos', 'linux', 'androidTV', 'appleTV', 'pc']; // Include 'pc' for backward compatibility
+        return platforms.some(platform => apps[platform] && Array.isArray(apps[platform]) && apps[platform].length > 0);
     }
 
     function setNavbarIndicator(navbarItemId) {
@@ -2234,7 +2301,7 @@
         const subscriptionLinksCard = document.getElementById('subscription-links-card');
         if (subscriptionLinksCard) subscriptionLinksCard.classList.remove('hidden');
 
-        if (data.user_status === 'ACTIVE' && data.apps && (data.apps.ios?.length > 0 || data.apps.android?.length > 0 || data.apps.pc?.length > 0)) {
+        if (data.user_status === 'ACTIVE' && data.apps && hasAnyApps(data.apps)) {
             window.appsData = data;
         }
 
@@ -2329,7 +2396,7 @@
             return;
         }
 
-        // ИСПРАВЛЕНО: Определяем предпочтительную платформу на основе User Agent
+        // UPDATED: Определяем предпочтительную платформу с поддержкой новых платформ
         let preferredPlatform = availablePlatforms[0]; // По умолчанию первая доступная
         
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -2341,14 +2408,26 @@
                 preferredPlatform = 'ios';
             }
         } else if (/android/i.test(userAgent)) {
-            // Android устройство
-            if (availablePlatforms.includes('android')) {
+            // Android устройство - проверяем TV или обычный Android
+            if (/TV/i.test(userAgent) && availablePlatforms.includes('androidTV')) {
+                preferredPlatform = 'androidTV';
+            } else if (availablePlatforms.includes('android')) {
                 preferredPlatform = 'android';
             }
         } else {
-            // Desktop/PC
-            if (availablePlatforms.includes('pc')) {
-                preferredPlatform = 'pc';
+            // Desktop/PC - определяем ОС
+            if (/Mac/i.test(userAgent) && availablePlatforms.includes('macos')) {
+                preferredPlatform = 'macos';
+            } else if (/Win/i.test(userAgent) && availablePlatforms.includes('windows')) {
+                preferredPlatform = 'windows';
+            } else if (/Linux/i.test(userAgent) && availablePlatforms.includes('linux')) {
+                preferredPlatform = 'linux';
+            } else if (availablePlatforms.includes('windows')) {
+                preferredPlatform = 'windows'; // Default desktop choice
+            } else if (availablePlatforms.includes('macos')) {
+                preferredPlatform = 'macos';
+            } else if (availablePlatforms.includes('linux')) {
+                preferredPlatform = 'linux';
             }
         }
 
@@ -2563,29 +2642,96 @@
         return stepDiv;
     }
 
-    // ИСПРАВЛЕНО: setupOSTabs с автоматическим выбором предпочтительной платформы
+    // Platform Icons - SVG icons for all platforms
+    function getPlatformIcon(platform) {
+        const icons = {
+            android: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6,18c0,0.55 0.45,1 1,1h1v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5V19h2v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5V19h1c0.55,0 1,-0.45 1,-1V8H6V18zM3.5,8C2.67,8 2,8.67 2,9.5v7c0,0.83 0.67,1.5 1.5,1.5S5,17.33 5,16.5v-7C5,8.67 4.33,8 3.5,8zM20.5,8C19.67,8 19,8.67 19,9.5v7c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5v-7C22,8.67 21.33,8 20.5,8zM15.53,2.16l1.3,-1.3c0.2,-0.2 0.2,-0.51 0,-0.71c-0.2,-0.2 -0.51,-0.2 -0.71,0l-1.48,1.48C13.85,1.23 12.95,1 12,1c-0.96,0 -1.86,0.23 -2.66,0.63L7.85,0.15c-0.2,-0.2 -0.51,-0.2 -0.71,0c-0.2,0.2 -0.2,0.51 0,0.71l1.31,1.31C6.97,3.26 6,5.01 6,7h12C18,5.01 17.03,3.26 15.53,2.16zM10,5H9V4h1V5zM15,5h-1V4h1V5z"/>
+            </svg>`,
+            ios: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
+            </svg>`,
+            windows: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3,12V6.75L9,5.43V11.91L3,12M20,3V11.75L10,11.9V5.21L20,3M3,13L9,13.09V19.9L3,18.75V13M20,13.25V22L10,20.09V13.1L20,13.25Z"/>
+            </svg>`,
+            macos: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
+            </svg>`,
+            linux: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H16V20A2,2 0 0,1 14,22H10A2,2 0 0,1 8,20V18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2M4,4V16H20V4H4Z"/>
+            </svg>`,
+            androidTV: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,3H3C1.89,3 1,3.89 1,5V17A2,2 0 0,0 3,19H8V21H16V19H21A2,2 0 0,0 23,17V5C23,3.89 22.1,3 21,3M21,17H3V5H21V17Z"/>
+            </svg>`,
+            appleTV: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,3H3C1.89,3 1,3.89 1,5V17A2,2 0 0,0 3,19H8V21H16V19H21A2,2 0 0,0 23,17V5C23,3.89 22.1,3 21,3M21,17H3V5H21V17Z"/>
+            </svg>`
+        };
+        return icons[platform] || icons.windows; // Default to windows icon
+    }
+
+    // ИСПРАВЛЕНО: setupOSTabs - заменен на новый UI с заголовком и кнопкой
     function setupOSTabs(platformKeys, preferredPlatform) {
         const osTabsContainer = document.getElementById('os-tabs');
         if (!osTabsContainer) return;
         
+        // Clear and replace with new UI
         osTabsContainer.innerHTML = '';
+        osTabsContainer.className = 'platform-selector-container';
+        
+        // Create new UI structure: Title + Button
+        const headerContainer = document.createElement('div');
+        headerContainer.className = 'flex justify-between items-center mb-4';
+        
+        // Title on the left
+        const title = document.createElement('h3');
+        title.className = 'text-lg font-semibold';
+        title.style.color = 'var(--color-primary)';
+        title.textContent = getTranslation('choose_app_title') || 'Доступные приложения';
+        
+        // Platform selector button on the right
+        const platformButton = document.createElement('button');
+        platformButton.className = 'btn btn-outlined platform-selector-btn';
         
         const platformNames = {
             'ios': 'iOS',
-            'android': 'Android', 
-            'pc': 'PC'
+            'android': 'Android',
+            'windows': 'Windows',
+            'macos': 'macOS',
+            'linux': 'Linux',
+            'androidTV': 'Android TV',
+            'appleTV': 'Apple TV'
         };
         
-        platformKeys.forEach((platform) => {
-            const tab = document.createElement('button');
-            const isActive = platform === preferredPlatform;
-            tab.className = `os-tab${isActive ? ' active' : ''}`;
-            tab.textContent = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
-            tab.onclick = () => switchOSTab(platform, tab);
-            osTabsContainer.appendChild(tab);
+        let currentPlatform = preferredPlatform;
+        
+        const updatePlatformButton = (platform) => {
+            const platformName = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+            platformButton.innerHTML = `
+                <div class="flex items-center gap-2">
+                    ${getPlatformIcon(platform)}
+                    <span>${platformName}</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+            `;
+        };
+        
+        updatePlatformButton(currentPlatform);
+        
+        // Click handler to show platform selection modal
+        platformButton.addEventListener('click', () => {
+            createPlatformSelectModal(platformKeys, currentPlatform, (selectedPlatform) => {
+                currentPlatform = selectedPlatform;
+                updatePlatformButton(selectedPlatform);
+                switchOSTab(selectedPlatform);
+            });
         });
         
-        // ИСПРАВЛЕНО: Активируем предпочтительную платформу
+        headerContainer.appendChild(title);
+        headerContainer.appendChild(platformButton);
+        osTabsContainer.appendChild(headerContainer);
+        
+        // Активируем предпочтительную платформу
         const preferredContent = document.getElementById(`${preferredPlatform}-content`);
         if (preferredContent) {
             // Сначала убираем active у всех
@@ -2595,11 +2741,86 @@
         }
     }
 
-    function switchOSTab(platformName, clickedTab) {
+    // New function to create platform selection modal
+    function createPlatformSelectModal(platforms, currentPlatform, onSelect) {
+        const modal = document.createElement('div');
+        modal.className = 'app-select-modal active';
+        
+        const content = document.createElement('div');
+        content.className = 'app-select-content';
+        
+        // Header
+        const header = document.createElement('div');
+        header.className = 'flex justify-between items-center mb-4';
+
+        const title = document.createElement('div');
+        title.className = 'app-select-title';
+        title.textContent = 'Выберите платформу';
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'app-select-close material-symbols-outlined';
+        closeBtn.textContent = 'close';
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
+        content.appendChild(header);
+        
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'app-select-options';
+        
+        const platformNames = {
+            'ios': 'iOS',
+            'android': 'Android',
+            'windows': 'Windows',
+            'macos': 'macOS',
+            'linux': 'Linux',
+            'androidTV': 'Android TV',
+            'appleTV': 'Apple TV'
+        };
+        
+        platforms.forEach((platform) => {
+            const option = document.createElement('button');
+            option.className = `app-select-option${platform === currentPlatform ? ' selected' : ''}`;
+            
+            const platformName = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+            
+            option.innerHTML = `
+                <div class="flex items-center gap-3">
+                    ${getPlatformIcon(platform)}
+                    <span>${platformName}</span>
+                </div>
+            `;
+            
+            option.addEventListener('click', () => {
+                onSelect(platform);
+                closeModal();
+            });
+            optionsContainer.appendChild(option);
+        });
+        
+        const closeModal = () => {
+            document.body.removeChild(modal);
+        };
+        
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        content.appendChild(optionsContainer);
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+    }
+
+    function switchOSTab(platformName, clickedTab = null) {
+        // Remove active from all tabs if they exist (for backward compatibility)
         document.querySelectorAll('.os-tab').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.os-content').forEach(content => content.classList.remove('active'));
         
-        clickedTab.classList.add('active');
+        if (clickedTab) {
+            clickedTab.classList.add('active');
+        }
+        
         const targetContent = document.getElementById(`${platformName}-content`);
         if (targetContent) targetContent.classList.add('active');
     }
