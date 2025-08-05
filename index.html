@@ -1767,7 +1767,8 @@
             step_before_subscription: 'Подготовка',
             step_add_subscription: 'Добавление подписки',
             step_after_subscription: 'После добавления',
-            step_connect_use: 'Подключение и использование'
+            step_connect_use: 'Подключение и использование',
+            select_platform: 'Выберите платформу'
         },
         en: {
             page_title: 'Subscription',
@@ -1823,7 +1824,8 @@
             step_before_subscription: 'Before subscription',
             step_add_subscription: 'Add subscription',
             step_after_subscription: 'After subscription',
-            step_connect_use: 'Connect and use'
+            step_connect_use: 'Connect and use',
+            select_platform: 'Select Platform'
         }
     };
 
@@ -2755,7 +2757,7 @@
 
         const title = document.createElement('div');
         title.className = 'app-select-title';
-        title.textContent = 'Выберите платформу';
+        title.textContent = getTranslation('select_platform');
 
         const closeBtn = document.createElement('span');
         closeBtn.className = 'app-select-close material-symbols-outlined';
